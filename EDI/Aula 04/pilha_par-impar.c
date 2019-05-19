@@ -62,6 +62,48 @@ pilha * inverter_pilha (pilha *topo) {
 	return topo_invertido;
 }
 
+// Contador de elementos pilha
+int conta_pilha (pilha *topo){
+	pilha *aux = topo;
+	int cont;
+
+	for (aux; aux; aux = aux->prox) // contando o número de nós na pilha
+		cont++;
+
+	return cont;
+}
+
+// verifica se as duas pilhas contém os mesmos elementos
+int compara_elementos_pilhas (pilha *pilha1_topo, pilha *pilha2_topo){
+	pilha *aux1 = pilha1_topo, *aux2 = pilha2_topo;
+	
+	// percorrendo as duas ao mesmo tempo
+	while (aux1 != NULL && aux2 != NULL)
+		if (aux1->elem != aux2->elem)
+			return 0; // pilha com ao menos um elemento distinto
+	
+	// verificando se uma das pilhas ainda tem elementos
+	if ((aux1 != NULL && aux2 == NULL) || (aux1 == NULL && aux2 != NULL))
+		return 0;
+
+	return 1; // pilha com elementos iguais!
+}
+
+void compara_pilhas (pilha *pilha1_topo, pilha *pilha2_topo){
+	printf ("\n --> Comparando as duas pilhas: ");
+	if (conta_pilha(pilha1_topo) == conta_pilha(pilha2_topo))
+		printf ("--> Ambas as pilhas possuem o mesmo comprimento!");
+	else
+		printf ("--> Ambas as pilhas possuem comprimento distintos");
+
+	if (compara_elementos_pilhas(pilha1_topo, pilha2_topo))
+		printf ("--> Ambas as pilhas possuem os mesmos elementos!");
+	else
+		printf ("--> Ambas as pilhas possuem elementos distintos");
+	
+	
+}
+
 int main(int argc, char const *argv[]) {
 
 	// declarando a variável topo da pilha
