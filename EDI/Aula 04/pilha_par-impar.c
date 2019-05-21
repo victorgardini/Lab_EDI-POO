@@ -104,6 +104,17 @@ void compara_pilhas (pilha *pilha1_topo, pilha *pilha2_topo){
 	
 }
 
+float media_pilha (pilha *topo){
+	int q_elementos = 0;
+	float media = 0;
+	pilha *aux = topo;
+
+	for (aux; aux != NULL; aux = aux->prox, q_elementos++)
+		media += aux->elem;
+	
+	return media / q_elementos
+}
+
 int main(int argc, char const *argv[]) {
 
 	// declarando a variável topo da pilha
@@ -124,8 +135,8 @@ int main(int argc, char const *argv[]) {
 	}
 
 	printf("\n\n >> Exibindo pilhas: \n");
-	printf(" >   Par: ");	exibir_pilha(topo_par);
-	printf("\n > Ímpar: "); exibir_pilha (topo_impar);
+	printf(" >   Par: ");	exibir_pilha(topo_par); printf("   Média: %.2f", media_pilha(topo_par));
+	printf("\n > Ímpar: "); exibir_pilha (topo_impar); printf("   Média: %.2f", media_pilha(topo_impar));
 
 	printf("\n\n >> Exibindo pilhas invertidas: \n");
 	topo_par = inverter_pilha(topo_par);
