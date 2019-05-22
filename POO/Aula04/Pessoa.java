@@ -5,15 +5,15 @@ public class Pessoa {
         Scanner dado = new Scanner(System.in);
 
         try {
-            System.out.println("--> Quanto você andou hoje [km]: ");
+            System.out.print("--> Quanto você andou hoje [km]: ");
             double km = dado.nextDouble();
             km *= 1000;
 
-            System.out.println("--> Quanl é o tamanho do seu passo [m]: ");
+            System.out.print("--> Quanl é o tamanho do seu passo [m]: ");
             double tam_passos = dado.nextDouble();
 
             PessoaCorredor pessoa01 = new PessoaCorredor(km, tam_passos);
-            System.out.println("--> Você deu " + pessoa01.getQuantidade_passos() + " passos");
+            System.out.println("--> Você deu, aproximadamente, " + pessoa01.getQuantidade_passos()  +" passos\n");
 
         } catch (NumberFormatException e) {
             System.out.println("--> Por favor, digite apenas números!");

@@ -24,6 +24,6 @@ public class PessoaCorredor {
     }
 
     public double getQuantidade_passos() {
-        return this.km_percorridos / this.tam_passo;
+        return Math.round(this.km_percorridos / this.tam_passo);
     }
 }
