@@ -3,6 +3,7 @@ public class PessoaCorredor {
     private double tam_passo; // em metros
 
     public PessoaCorredor(double km_percorridos, double tam_passo) {
+        // validar estas entradas aqui
         this.km_percorridos = km_percorridos;
         this.tam_passo = tam_passo;
     }

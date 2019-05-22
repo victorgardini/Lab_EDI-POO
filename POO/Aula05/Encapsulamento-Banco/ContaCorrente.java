@@ -23,11 +23,11 @@ public class ContaCorrente {
 
     public void depositar(double deposito) {
         if (deposito > 0)
-            this.saldo += deposito;
+            saldo += deposito;
     }
 
     public void sacar(double saque) {
-        if (saque > 0 && (this.saldo - saque >= 0))
-            this.saldo -= saque;
+        if (saque > 0 && (saldo - saque >= 0))
+            saldo -= saque;
     }
 }

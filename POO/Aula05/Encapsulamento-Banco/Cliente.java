@@ -1,3 +1,5 @@
+import javax.swing.*;
+
 public class Cliente {
     private String nome;
     private String cpf;
@@ -37,5 +39,27 @@ public class Cliente {
     // Método referente a abertura de uma conta corrente
     public void abrirConta(int num_agencia, int num_conta) {
         conta_corrente = new ContaCorrente(num_agencia, num_conta);
+    }
+
+    public double getSaldo(){
+        return conta_corrente.getSaldo();
+    }
+
+    public void setSaldo(double novo_saldo){
+        if(novo_saldo > 0){
+            conta_corrente.depositar(novo_saldo);
+        }
+    }
+
+    public void getExtrato(){
+        JOptionPane.showMessageDialog(null, "Exibindo informaçoẽs do cliente:\n" +
+        "Nome: " + nome + "\n" +
+        "CPF: " + cpf + "\n" +
+        "RG: " + rg + "\n" +
+        "Endereço: " + endereco + "\n" +
+        "Telefone: " + telefone + "\n" +
+        "Agencia: " + conta_corrente.getNumAgencia() + "\n" +
+        "Numero Conta: " + conta_corrente.getNumConta() + "\n" +
+        "Saldo: " + conta_corrente.getSaldo() + "\n", "Exibindo informações do cliente", JOptionPane.INFORMATION_MESSAGE);
     }
 }
