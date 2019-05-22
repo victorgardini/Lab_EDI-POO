@@ -4,6 +4,7 @@ public class Cliente {
     private String rg;
     private String endereco;
     private int telefone;
+    private ContaCorrente conta_corrente;
 
     public Cliente(String nome, String cpf, String rg, String endereco, int telefone) {
         this.nome = nome;
@@ -31,5 +32,10 @@ public class Cliente {
 
     public int getTelefone() {
         return telefone;
+    }
+
+    // Método referente a abertura de uma conta corrente
+    public void abrirConta(int num_agencia, int num_conta) {
+        conta_corrente = new ContaCorrente(num_agencia, num_conta);
     }
 }

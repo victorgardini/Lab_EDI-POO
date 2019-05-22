@@ -10,7 +10,7 @@ public class ContaCorrente {
     }
 
     public int getNumAgencia() {
-        REUtil num_agencia;
+        return num_agencia;
     }
 
     public int getNumConta() {
