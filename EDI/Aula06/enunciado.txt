@@ -1,0 +1,14 @@
+Fazer um projeto de serviço de garçom eletrônico, seu programa deve conter uma lista de prioridade e um garçom eletrônico (o cara que atende a fila) por 5 tempos.
+Quando o elemento é atendido por 5t ou ele vai pro final da fila e colocar nnovamente em sua prioridade.
+Quando o elemento é atendido pela segunda vez, caso ele não termine de ser executado, diminuir um ponto na sua prioridade.
+
+Quando o elemento é criado, deve receber um id, nome, tempo de atendimento total (random, de 5 - 50) e a quantidade de vezes em que o elemento foi atendido (inicialmente, 0).
+
+Os elementos da fila podem ter 3 níveis de prioridade, 1 - pessoa com fome, 2 - pessoa com muita fome, 3 - cagado de fome. A prioridade segue do maior para o menor (3 > 2 > 1).
+
+O seu programa deve mostrar a situação da fila em todos os momentos e quando o elemento terminar, você deve mostrar todos os seus dados
+
+Fila de prioridade, na ponta o garçom eletrônico.
+
+
+Até 10 elementos na fila.
