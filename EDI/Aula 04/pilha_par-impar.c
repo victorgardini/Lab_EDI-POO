@@ -100,19 +100,19 @@ void compara_pilhas (pilha *pilha1_topo, pilha *pilha2_topo){
 		printf ("--> Ambas as pilhas possuem os mesmos elementos!");
 	else
 		printf ("--> Ambas as pilhas possuem elementos distintos");
-	
-	
 }
 
 float media_pilha (pilha *topo){
-	int q_elementos = 0;
+	if (topo == NULL) return 0;
+
 	float media = 0;
 	pilha *aux = topo;
+	int q_elementos = conta_pilha (topo);
 
-	for (aux; aux != NULL; aux = aux->prox, q_elementos++)
+	for (aux; aux != NULL; aux = aux->prox)
 		media += aux->elem;
 	
-	return media / q_elementos
+	return media / q_elementos;
 }
 
 int main(int argc, char const *argv[]) {
@@ -122,9 +122,11 @@ int main(int argc, char const *argv[]) {
 	pilha *topo_impar = NULL;
 	pilha *topo_par = NULL;
 
+	char opc[10];
+
 	int i, n;
 
-	for (int i = 0; i < 6; ++i) {
+	while (1) {
 		printf("-> Digite um número: ");
 		scanf("%d", &n);
 
@@ -132,6 +134,11 @@ int main(int argc, char const *argv[]) {
 			topo_par = pop(topo_par, n);
 		else
 			topo_impar = pop(topo_impar, n);
+
+		printf (" --> Deseja inserir mais elementos [s/n]: ");
+		scanf ("%s", opc);
+		if (opc[0] == 'N' || opc[0] == 'n')
+			break;		
 	}
 
 	printf("\n\n >> Exibindo pilhas: \n");
