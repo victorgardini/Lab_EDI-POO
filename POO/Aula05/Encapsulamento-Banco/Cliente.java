@@ -8,6 +8,7 @@ public class Cliente {
     private int telefone;
     private ContaCorrente conta_corrente;
 
+    // construtor cliente
     public Cliente(String nome, String cpf, String rg, String endereco, int telefone) {
         this.nome = nome;
         this.cpf = cpf;
@@ -16,6 +17,7 @@ public class Cliente {
         this.telefone = telefone;
     }
 
+    // métodos
     public String getNome() {
         return nome;
     }
@@ -41,25 +43,32 @@ public class Cliente {
         conta_corrente = new ContaCorrente(num_agencia, num_conta);
     }
 
-    public double getSaldo(){
+    public double getSaldo() {
         return conta_corrente.getSaldo();
     }
 
-    public void setSaldo(double novo_saldo){
-        if(novo_saldo > 0){
+    // setSaldo -> depósito
+    public void setSaldo(double novo_saldo) {
+        if (novo_saldo > 0) {
             conta_corrente.depositar(novo_saldo);
+        } else {
+            MensagemErro("Valor de depósito inválido!");
+            // forçando uma exceção
+            throw new ArithmeticException();
         }
     }
 
-    public void getExtrato(){
-        JOptionPane.showMessageDialog(null, "Exibindo informaçoẽs do cliente:\n" +
-        "Nome: " + nome + "\n" +
-        "CPF: " + cpf + "\n" +
-        "RG: " + rg + "\n" +
-        "Endereço: " + endereco + "\n" +
-        "Telefone: " + telefone + "\n" +
-        "Agencia: " + conta_corrente.getNumAgencia() + "\n" +
-        "Numero Conta: " + conta_corrente.getNumConta() + "\n" +
-        "Saldo: " + conta_corrente.getSaldo() + "\n", "Exibindo informações do cliente", JOptionPane.INFORMATION_MESSAGE);
+    // Método que levanta uma mensagem de erro préviamente configurada
+    private void MensagemErro(String mensagem) {
+        JOptionPane.showMessageDialog(null, mensagem, "Erro: " + mensagem, JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void getExtrato() {
+        JOptionPane.showMessageDialog(null,
+                "Exibindo informaçoẽs do cliente:\n" + "Nome: " + nome + "\n" + "CPF: " + cpf + "\n" + "RG: " + rg
+                        + "\n" + "Endereço: " + endereco + "\n" + "Telefone: " + telefone + "\n" + "Agencia: "
+                        + conta_corrente.getNumAgencia() + "\n" + "Numero Conta: " + conta_corrente.getNumConta() + "\n"
+                        + "Saldo: " + conta_corrente.getSaldo() + "\n",
+                "Exibindo informações do cliente", JOptionPane.INFORMATION_MESSAGE);
     }
 }
