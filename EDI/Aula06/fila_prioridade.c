@@ -70,86 +70,72 @@ fila * insere_ordenado(fila *inicio){
 }
 
 void imprime_lista(fila *inicio){
-    fila *aux = inicio;
-    printf("\n--> Exibindo lista:\n");
-    while (aux != NULL) {
-        printf("Nome: %s\n", aux->nome);
-        printf("Prioridade: %d\n\n", aux->prioridade);
-        aux = aux->prox;
-    }
-}
-
-fila * insere_ordenado_dois(fila *inicio, char nome[], int id, int tempo_atendimento, int q_atendimento, int prioridade){
-    fila * novo = (fila *) malloc(sizeof(fila));
-
-    novo->q_atendimento = q_atendimento;
-    novo->tempo_atendimento = tempo_atendimento;
-    strcpy(novo->nome, nome);
-    novo->id = id;
-    novo->prioridade = prioridade;
-
-    // inserir ordenado reaproveitado
-    if (inicio == NULL) {
-        novo->prox = NULL;
-        return novo;
-    }
-    // inserindo ordenado
-    fila *aux = inicio, *ant = NULL;
-    while (aux != NULL && aux->prioridade >= novo->prioridade) {
-        ant = aux;
-        aux = aux->prox;
-    }
-    if (ant == NULL) { // inserção no início
-        novo->prox = inicio;
-        return novo;
-    }
+    if(inicio == NULL)
+        printf("  >>> Lista vazia!!!");
     else {
-        if (aux == NULL){ // inserção no fim
-            ant->prox = novo;
-            novo->prox = NULL;
+        fila *aux = inicio;
+        while (aux != NULL) {
+            printf("ID: %d\n", aux->id);
+            // printf("Nome: %s\n", aux->nome);
+            printf("Prioridade: %d\n", aux->prioridade);
+            printf("Tempo de execução: %d\n\n", aux->tempo_atendimento);
+            aux = aux->prox;
         }
-        else { // inserção no meio
-            ant->prox = novo;
-            novo->prox = aux;
-        }
-        return inicio;
     }
-}
-
-// função que pega uma lista e utilizando o insere ordenado, cria uma nova lista ordenada (l2)
-fila * reorganiza_fila(fila *l1) {
-    fila * l2 = NULL, *aux;
-    while(l1 != NULL) {
-        aux = l1;
-        l2 = insere_ordenado_dois(l1, l1->nome, l1->id, l1->tempo_atendimento, l1->q_atendimento, l1->prioridade);
-        l1 = l1->prox;
-        free(aux);
-    }
-    return l2;
 }
 
 // a cada execução eu tiro 5 do tempo de execução (equivalente a 5t) e jogo o elemento pro fim da lista
-fila * executar(fila *topo){
-    // Computando o tempo de execução
-    if(topo->tempo_atendimento < 5)
+fila * executar(fila *topo, fila ** topo_finalizado){
+    // Se durante esta execução, o nó tiver finalizado o processo, jogar pra uma outra lista
+    if(topo->tempo_atendimento <= 5) {
         topo->tempo_atendimento = 0;
+        fila *aux = topo; // jogar o topo para outra lista
+        topo = topo->prox;
+
+        // sempre inserção no topo da fila
+        if (*topo_finalizado == NULL){
+            *topo_finalizado = aux;
+            aux->prox = NULL;
+        }
+        else {
+            aux->prox = *topo_finalizado;
+            *topo_finalizado = aux;
+        }
+
+        // verificando se não é o último processo a ser executado
+        if(topo == NULL)
+            return NULL;
+
+        return topo;
+    }
     else
         topo->tempo_atendimento -= 5;
     
     // Computando a prioridade
     topo->q_atendimento++;
-    if(topo->q_atendimento == 2)
-        if(topo->prioridade > 1) // caso seja possível reduzir a prioridade
-            topo->prioridade--;
+    if(topo->q_atendimento >= 2 && topo->prioridade > 1) // caso necessário reduzir a prioridade
+        topo->prioridade--;
 
     // jogando o topo pro fim da lista
-    fila *aux = topo, *aux2;
+    fila *aux = topo, *aux2 = topo, *ant = NULL;
     topo = topo->prox; // novo topo!
 
-    while(aux2->prox != NULL) // percorrendo até o último elemento
-        aux2 = aux2->prox;
-    aux2->prox = aux; // colocando o antigo topo no fim da fila
-    aux->prox = NULL;
+    // basicamente, uma cópia do insere ordenado
+    while(aux != NULL && aux->prioridade >= aux2->prioridade){ //aux2 é o nó que eu quero colocar denovo na lista
+        ant = aux;
+        aux = aux->prox;
+    }
+
+    if(ant == NULL)// inserção no início
+        return topo; // se a inserção for no topo, o elemento já está no topo sadhuasdhuasudh
+    else if(aux == NULL){ // percorri toda a lista, inserção no fim
+        ant->prox = aux2;
+        aux2->prox = NULL;
+    }
+    else { // inserção no meio
+        aux2->prox = aux->prox;
+        aux->prox = aux2;
+    }
 
     return topo;
 }
@@ -157,21 +143,34 @@ fila * executar(fila *topo){
 int main() {
     srand(time(NULL));
 
-    fila *inicio = NULL, *l_teste = NULL;
+    fila * execucao = NULL;
+    fila * finalizados = NULL;
     int i;
 
     for (i = 0; i < 3; i++){
-        inicio = insere_ordenado(inicio);
+        execucao = insere_ordenado(execucao);
         getchar();
         printf("\n---------------------------\n");
     }
 
-    imprime_lista(inicio);
+    printf("--> Estado inicial:\n");
+    imprime_lista(execucao);
 
-    printf("\n\nTeste:");
-    l_teste = reorganiza_fila(inicio);
-    // printf("%p", l_teste);
-    imprime_lista(l_teste);
+
+    // executando enquanto há processos
+    while(execucao != NULL) {
+        execucao = executar(execucao, &finalizados);
+        // imprime_lista(execucao);
+    }
+
+    // exibindo resultados
+    printf("\n---------------------------\n");
+    printf("--> Fila de Execuções:\n");
+    imprime_lista(execucao);
+
+    printf("\n---------------------------\n");
+    printf("--> Processos finalizados:\n");
+    imprime_lista(finalizados);
 
     return 0;
 }
