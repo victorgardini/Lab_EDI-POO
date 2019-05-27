@@ -11,6 +11,8 @@
 ---------------------------------------------------------------------------------------------
     A cada vez que eu tirar 5 do tempo, jogar pro fim da fila e ordenar a prioridade dnv
     Se eu tiver executado duas vezes 5t, reduzir a prioridade
+
+    Incluir menu de opções.
 */
 
 #include <stdio.h>
@@ -38,8 +40,10 @@ fila * insere_ordenado(fila *inicio){
     printf("--> Digite o id: ");
     scanf("%d", &novo->id);
     
-    printf("--> Digite a prioridade: ");
+    printf("--> Prioridade:\n   >>> 1 - Pouca fome\n   >>> 2 - Muita fome\n   >>> 3 - Zumbi (muita fome)\n--> Digite a prioridade: ");
     scanf("%d", &novo->prioridade);
+
+    printf("\n---------------------------\n");
 
     if (inicio == NULL) {
         novo->prox = NULL;
@@ -75,11 +79,13 @@ void imprime_lista(fila *inicio){
     else {
         fila *aux = inicio;
         while (aux != NULL) {
-            printf("ID: %d\n", aux->id);
+            printf("  >>> ID: %d\n", aux->id);
             // printf("Nome: %s\n", aux->nome);
-            printf("Prioridade: %d\n", aux->prioridade);
-            printf("Tempo de execução: %d\n\n", aux->tempo_atendimento);
+            printf("  >>> Prioridade: %d\n", aux->prioridade);
+            printf("  >>> Tempo de execução: %d\n", aux->tempo_atendimento);
+            printf("  >>> Quantidade de execuções: %d\n", aux->q_atendimento);
             aux = aux->prox;
+            printf("\n---------------------------\n");
         }
     }
 }
@@ -137,38 +143,72 @@ fila * executar(fila *topo, fila ** topo_finalizado){
     return topo;
 }
 
+fila * limpar_fila(fila *topo){
+    fila *aux;
+    while (topo != NULL) {
+        aux = topo;
+        topo = topo->prox;
+        free(aux);
+    }
+    return topo;
+}
+
+void esperar(){
+    printf("\nDigite algo para continuar...");
+    getchar();
+}
+
 int main() {
     srand(time(NULL));
 
     fila * execucao = NULL;
     fila * finalizados = NULL;
-    int i;
+    int i, n, opc;
 
-    for (i = 0; i < 3; i++){
-        execucao = insere_ordenado(execucao);
-        getchar();
-        printf("\n---------------------------\n");
-    }
+    do { // for infinito
+        system("clear");
+        printf("------>   Bem bindo(a):   <------");
+        printf("\n------ Digite alguma opção ------\n   (1) Adicionar na fila\n   (2) Listar pedidos\n   (3) Executar pedidos\n   (4) Limpar filas\n   (0) Finalizar programa\n--> Opção: ");
+        scanf("%d", &opc);
+        printf("\n\n");
+        getchar(); // limpando o buffer
+        switch (opc) {
+            case 1: { // adicionar elemento na pilha
+                execucao = insere_ordenado(execucao);
+                printf("\n---------------------------\n");
+                break;
+            }
+            case 2: { // listar estado da pilha
+                printf("\n--> Imprimindo lista de pedidos:\n");
+                imprime_lista(execucao);
+                esperar(); // função Digite algo para continuar
+                break;
+            }
+            case 3: {
+                if(execucao != NULL) {
+                    printf("\n Executando pedido...\n");
+                    execucao = executar(execucao, &finalizados);
+                }
+                else
+                    printf("\n  >>> ERRO: Não há pedidos a serem executados...\n\n");
+                break;
+            }
+            case 4: {
+                printf(">>> Limpando todas as filas.\n");
+                execucao = limpar_fila(execucao);
+                finalizados = limpar_fila(finalizados);
 
-    printf("--> Estado inicial:\n");
-    imprime_lista(execucao);
+                printf(">>> Filas limpas!!!\n\n");
+                esperar();
+                break;
+            }
+            case 0:
+                break;
+            default:
+                printf("\nDigite entradas válidas.\n");
+        }
+    } while (opc != 0);
 
-
-    // executando enquanto há processos
-    while(execucao != NULL) {
-        execucao = executar(execucao, &finalizados);
-        // printf("\n---------------------------\n");
-        // imprime_lista(execucao);
-    }
-
-    // exibindo resultados
-    printf("\n---------------------------\n");
-    printf("--> Fila de Execuções:\n");
-    imprime_lista(execucao);
-
-    printf("\n---------------------------\n");
-    printf("--> Processos finalizados:\n");
-    imprime_lista(finalizados);
-
+    printf(" --> Volte sempre :)\n\n");
     return 0;
 }
