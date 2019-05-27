@@ -89,6 +89,7 @@ fila * executar(fila *topo, fila ** topo_finalizado){
     // Se durante esta execução, o nó tiver finalizado o processo, jogar pra uma outra lista
     if(topo->tempo_atendimento <= 5) {
         topo->tempo_atendimento = 0;
+        topo->prioridade = 1; // passando pra outra pilha com prioridade mínima
         fila *aux = topo; // jogar o topo para outra lista
         topo = topo->prox;
 
@@ -102,10 +103,6 @@ fila * executar(fila *topo, fila ** topo_finalizado){
             *topo_finalizado = aux;
         }
 
-        // verificando se não é o último processo a ser executado
-        if(topo == NULL)
-            return NULL;
-
         return topo;
     }
     else
@@ -113,11 +110,11 @@ fila * executar(fila *topo, fila ** topo_finalizado){
     
     // Computando a prioridade
     topo->q_atendimento++;
-    if(topo->q_atendimento >= 2 && topo->prioridade > 1) // caso necessário reduzir a prioridade
+    if(topo->q_atendimento > 1 && topo->q_atendimento % 2 == 0 && topo->prioridade > 1) // caso necessário reduzir a prioridade
         topo->prioridade--;
 
     // jogando o topo pro fim da lista
-    fila *aux = topo, *aux2 = topo, *ant = NULL;
+    fila *aux = topo->prox, *aux2 = topo, *ant = NULL;
     topo = topo->prox; // novo topo!
 
     // basicamente, uma cópia do insere ordenado
@@ -127,7 +124,7 @@ fila * executar(fila *topo, fila ** topo_finalizado){
     }
 
     if(ant == NULL)// inserção no início
-        return topo; // se a inserção for no topo, o elemento já está no topo sadhuasdhuasudh
+        return aux2; // se a inserção for no topo, o elemento já está no topo sadhuasdhuasudh
     else if(aux == NULL){ // percorri toda a lista, inserção no fim
         ant->prox = aux2;
         aux2->prox = NULL;
@@ -160,6 +157,7 @@ int main() {
     // executando enquanto há processos
     while(execucao != NULL) {
         execucao = executar(execucao, &finalizados);
+        // printf("\n---------------------------\n");
         // imprime_lista(execucao);
     }
 
