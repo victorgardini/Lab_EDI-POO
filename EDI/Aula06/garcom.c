@@ -163,42 +163,78 @@ int main() {
 
     fila * execucao = NULL;
     fila * finalizados = NULL;
-    int i, n, opc;
+    int i, n, opc, quant_execucoes = 0;
 
     do { // for infinito
         system("clear");
-        printf("------>   Bem bindo(a):   <------");
-        printf("\n------ Digite alguma opção ------\n   (1) Adicionar na fila\n   (2) Listar pedidos\n   (3) Executar pedidos\n   (4) Limpar filas\n   (0) Finalizar programa\n--> Opção: ");
+        printf("------>   Bem bindo(a):   <------\n > Quantidade de execuções: %d", quant_execucoes);
+        printf("\n------ Digite alguma opção ------\n  >> (1) Adicionar na fila\n  >> (2) Listar pedidos (pendentes)\n  >> (3) Listar pedidos (finalizados)\n  >> (4) Executar apenas uma vez\n  >> (5) Executar todos os pedidos de uma vez\n  >> (6) Limpar filas\n  >> (0) Finalizar programa\n--> Opção: ");
         scanf("%d", &opc);
-        printf("\n\n");
+        printf("\n");
         getchar(); // limpando o buffer
         switch (opc) {
             case 1: { // adicionar elemento na pilha
+                printf("\n--> Cadastrando pedidos:\n");
                 execucao = insere_ordenado(execucao);
                 printf("\n---------------------------\n");
                 break;
             }
-            case 2: { // listar estado da pilha
-                printf("\n--> Imprimindo lista de pedidos:\n");
+            case 2: {
+                printf("\n--> Imprimindo lista de pedidos (pendentes):\n");
                 imprime_lista(execucao);
                 esperar(); // função Digite algo para continuar
                 break;
             }
             case 3: {
-                if(execucao != NULL) {
-                    printf("\n Executando pedido...\n");
-                    execucao = executar(execucao, &finalizados);
-                }
-                else
-                    printf("\n  >>> ERRO: Não há pedidos a serem executados...\n\n");
+                printf("\n--> Imprimindo lista de pedidos (finalizados):\n");
+                imprime_lista(finalizados);
+                esperar(); // função Digite algo para continuar
                 break;
             }
             case 4: {
-                printf(">>> Limpando todas as filas.\n");
-                execucao = limpar_fila(execucao);
-                finalizados = limpar_fila(finalizados);
+                if(execucao != NULL) {
+                    printf("\n Executando pedidos apenas uma vez...\n");
+                    execucao = executar(execucao, &finalizados);
+                    imprime_lista(execucao);
+                    quant_execucoes++;
+                }
+                else
+                    printf("  >>> ERRO: Não há pedidos a serem executados...\n");
+                    esperar();
+                break;
+            }
+            case 5: {
+                printf("\n Executando todos os pedidos (de uma vez)...\n");
+                if(execucao == NULL) { // lista vazia
+                    printf(" -> Parece que não tínhamos pedidos para serem executados...\n");
+                }
+                else {
+                    while (execucao != NULL)
+                    execucao = executar(execucao, &finalizados);
+                    
+                    quant_execucoes++;
 
-                printf(">>> Filas limpas!!!\n\n");
+                    printf("\n >>> Deseja exibir a lista de processos finalizados [S/N]: ");
+                    char resp[20];
+                    scanf("%s", resp);
+                    if (resp[0] == 's' || resp[0] == 'S') {
+                        printf("\n--> Imprimindo lista de pedidos:\n");
+                        imprime_lista(finalizados);
+                        getchar(); // limpando buffer
+                    }
+                }
+                    esperar();
+                break;
+            }
+            case 6: {
+                printf(">>> Limpando todas as filas...\n");
+                if(execucao == NULL && finalizados == NULL)
+                    printf(" -> Parece que não tínhamos pedidos para serem limpos...\n");
+                else {
+                    execucao = limpar_fila(execucao);
+                    finalizados = limpar_fila(finalizados);
+                    printf(">>> Filas limpas!!!\n\n");
+                }
                 esperar();
                 break;
             }
