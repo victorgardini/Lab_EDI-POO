@@ -1,18 +1,13 @@
+/***************************************************************/
+/* Nome: Victor Fernandes Gardini                              */
+/* RA: 181.044.013                                             */
+/* Compilador: gcc 7.4.0                                       */
+/***************************************************************/
 /*
+    Nome: Victor Fernandes Gardini
+    R.A.: 181044
     Título e-mail: ED1_exercicioprova1_VictorFernandesGardini
     e-mail: allan.contessoto@unesp.br
-
-    Obs: Cada vez que eu "executar o garçom", devo subtrair 5 do tempo de execução e somar 1 na quantidade de vezes executado
-    Se o nó tiver sido executado 2 vezes, e ainda sobrar tempo, reduzir a prioridade
-    Executar: Pegar a maior prioridade e executar o primeiro elemento de maior prioridade (subtrair o tempo), se tiver executado duas vezes, reduzir a prioridade
-    Toda vez que reduzir a prioridade, exibir a lista na tela
-    Sempre ordenar a lista quando quando reduzir a prioridade de um elemento
-    
----------------------------------------------------------------------------------------------
-    A cada vez que eu tirar 5 do tempo, jogar pro fim da fila e ordenar a prioridade dnv
-    Se eu tiver executado duas vezes 5t, reduzir a prioridade
-
-    Incluir menu de opções.
 */
 
 #include <stdio.h>
@@ -74,7 +69,7 @@ fila * insere_ordenado(fila *inicio){
 }
 
 void imprime_lista(fila *inicio){
-    if(inicio == NULL)
+    if (inicio == NULL)
         printf("  >>> Lista vazia!!!");
     else {
         fila *aux = inicio;
@@ -93,7 +88,7 @@ void imprime_lista(fila *inicio){
 // a cada execução eu tiro 5 do tempo de execução (equivalente a 5t) e jogo o elemento pro fim da lista
 fila * executar(fila *topo, fila ** topo_finalizado){
     // Se durante esta execução, o nó tiver finalizado o processo, jogar pra uma outra lista
-    if(topo->tempo_atendimento <= 5) {
+    if (topo->tempo_atendimento <= 5) {
         topo->tempo_atendimento = 0;
         topo->prioridade = 1; // passando pra outra pilha com prioridade mínima
         fila *aux = topo; // jogar o topo para outra lista
@@ -116,7 +111,7 @@ fila * executar(fila *topo, fila ** topo_finalizado){
     
     // Computando a prioridade
     topo->q_atendimento++;
-    if(topo->q_atendimento > 1 && topo->q_atendimento % 2 == 0 && topo->prioridade > 1) // caso necessário reduzir a prioridade
+    if (topo->q_atendimento > 1 && topo->q_atendimento % 2 == 0 && topo->prioridade > 1) // caso necessário reduzir a prioridade
         topo->prioridade--;
 
     // jogando o topo pro fim da lista
@@ -124,14 +119,14 @@ fila * executar(fila *topo, fila ** topo_finalizado){
     topo = topo->prox; // novo topo!
 
     // basicamente, uma cópia do insere ordenado
-    while(aux != NULL && aux->prioridade >= aux2->prioridade){ //aux2 é o nó que eu quero colocar denovo na lista
+    while (aux != NULL && aux->prioridade >= aux2->prioridade){ //aux2 é o nó que eu quero colocar denovo na lista
         ant = aux;
         aux = aux->prox;
     }
 
-    if(ant == NULL)// inserção no início
+    if (ant == NULL)// inserção no início
         return aux2; // se a inserção for no topo, o elemento já está no topo sadhuasdhuasudh
-    else if(aux == NULL){ // percorri toda a lista, inserção no fim
+    else if (aux == NULL){ // percorri toda a lista, inserção no fim
         ant->prox = aux2;
         aux2->prox = NULL;
     }
@@ -192,7 +187,7 @@ int main() {
                 break;
             }
             case 4: {
-                if(execucao != NULL) {
+                if (execucao != NULL) { // se a lista não for vazia
                     printf("\n Executando pedidos apenas uma vez...\n");
                     execucao = executar(execucao, &finalizados);
                     imprime_lista(execucao);
@@ -205,17 +200,17 @@ int main() {
             }
             case 5: {
                 printf("\n Executando todos os pedidos (de uma vez)...\n");
-                if(execucao == NULL) { // lista vazia
+                if (execucao == NULL) { // lista vazia
                     printf(" -> Parece que não tínhamos pedidos para serem executados...\n");
                 }
                 else {
-                    while (execucao != NULL)
-                    execucao = executar(execucao, &finalizados);
-                    
-                    quant_execucoes++;
+                    while (execucao != NULL) {
+                        execucao = executar(execucao, &finalizados);
+                        quant_execucoes++;
+                    }
 
                     printf("\n >>> Deseja exibir a lista de processos finalizados [S/N]: ");
-                    char resp[20];
+                    char resp[10];
                     scanf("%s", resp);
                     if (resp[0] == 's' || resp[0] == 'S') {
                         printf("\n--> Imprimindo lista de pedidos:\n");
@@ -228,7 +223,7 @@ int main() {
             }
             case 6: {
                 printf(">>> Limpando todas as filas...\n");
-                if(execucao == NULL && finalizados == NULL)
+                if (execucao == NULL && finalizados == NULL)
                     printf(" -> Parece que não tínhamos pedidos para serem limpos...\n");
                 else {
                     execucao = limpar_fila(execucao);
