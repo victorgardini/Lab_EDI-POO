@@ -4,8 +4,7 @@ import javax.swing.*;
 
 public class Banco {
     public static void main(String args[]) {
-        JOptionPane.showMessageDialog(null, "Bem vindo ao Banco Victor", "Bem vindo(a)",
-                JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Bem vindo ao Banco Victor", "Bem vindo(a)", JOptionPane.INFORMATION_MESSAGE);
 
         // declarando a lista cliente
         List<Cliente> ListaClientes = new ArrayList<>();
@@ -63,11 +62,9 @@ public class Banco {
                 ListaClientes.get(i).getExtrato();
             }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Por favor, digite entradas válidas!", "Valores inválidos!",
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Por favor, digite entradas válidas!", "Valores inválidos!", JOptionPane.ERROR_MESSAGE);
         } catch (ArithmeticException e) {
-            JOptionPane.showMessageDialog(null, "Por favor, digite entradas válidas!", "Valores inválidos!",
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Por favor, digite entradas válidas!", "Valores inválidos!", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
