@@ -1,4 +1,4 @@
-public class ClienteFisico extends Cliente{
+ public class ClienteFisico extends Cliente{
     private String CPF;
 
     public ClienteFisico(String nome, String endereco, String telefone, String email, String CPF){
@@ -6,11 +6,15 @@ public class ClienteFisico extends Cliente{
         this.CPF = CPF;
     }
 
-    public String getCPF(){
+    public String getDocumento(){
         return CPF;
     }
 
-    public void setCPF(String CPF){
-        this.CPF = CPF;
+    public void setDocumento(String documento){
+        this.CPF = documento;
+    }
+
+    public String getTipoCliente(){
+        return "Pessoa Física";
     }
 }

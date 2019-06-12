@@ -1,4 +1,4 @@
-public class Cliente{
+public abstract class Cliente{
     private String nome;
     private String endereco;
     private String telefone;
@@ -42,4 +42,8 @@ public class Cliente{
     public void setEmail(String email){
         this.email = email;
     }
+
+    public abstract String getTipoCliente();
+    public abstract String getDocumento();
+    public abstract void setDocumento(String documento);
 }

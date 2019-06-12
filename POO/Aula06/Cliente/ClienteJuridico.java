@@ -6,11 +6,15 @@ public class ClienteJuridico extends Cliente{
         this.CNPJ = CNPJ;
     }
 
-    public String getCNPJ(){
+    public String getDocumento(){
         return CNPJ;
     }
 
-    public void setCNPJ(String CNPJ){
-        this.CNPJ = CNPJ;
+    public void setDocumento(String documento){
+        this.CNPJ = documento;
+    }
+
+    public String getTipoCliente(){
+        return "Pessoa Jurídica";
     }
 }
