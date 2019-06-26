@@ -6,6 +6,14 @@ public class Inseto extends Animal{
         this.n_antenas = n_antenas;
     }
     
+    public int getAntenas(){
+        return n_antenas;
+    }
+
+    public void setAntenas(int n_antenas){
+        this.n_antenas = n_antenas;
+    }
+
     public String locomover(){
         return "Locomoção de Inseto";
     }
