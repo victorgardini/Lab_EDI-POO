@@ -1,12 +1,11 @@
 public abstract class Funcionario{
     private String nome;
     private String sobrenome;
-    private double salario;
+    protected double salario;
 
-    public Funcionario(String nome, String sobrenome, double salario){
+    public Funcionario(String nome, String sobrenome){
         this.nome = nome;
         this.sobrenome = sobrenome;
-        this.salario = salario;
     }
 
     public String getNome(){
@@ -18,5 +17,7 @@ public abstract class Funcionario{
     }
 
     public abstract double getSalario();
+    public abstract String tipoFuncionario();
+    public abstract int getQuantidade();
     // public abstract void setSalario();
 }
