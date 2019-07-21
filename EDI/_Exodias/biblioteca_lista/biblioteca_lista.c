@@ -65,7 +65,7 @@ void novo_livro_fim (pont_livros * p) {
     }
 }
 
-// equivalente ao pause break do windows
+// equivalente ao pause("break") do windows
 void esperar(){
     getchar();
     printf("\n\nDigite algo para continuar...");
@@ -89,7 +89,7 @@ void exibir_livro (livro * p_livro) {
 }
 
 // função insere novo livro no início da lista
-void novo_livro_inicio(pont_livros *p) {
+void novo_livro_inicio(pont_livros * p) {
     // alocando um nó livro
     livro * novo = (livro *) malloc (sizeof (livro));
 
@@ -268,27 +268,31 @@ int excluir_livro (pont_livros * p, int cod_livro) {
     }
 }
 
-// função faz a reserva do livro, retorna 1 se reservar, -1 se erro, -2 se já estiver reservado
-int reservar_livro (pont_livros * p, int cod_livro) {
-    livro * aux = p->inicio;
+// função faz a reserva do livro
+pont_livros reservar_livro (pont_livros p, int cod_livro) {
+    livro * aux = p.inicio;
     
-    while (aux->cod_sistema != cod_livro && aux != NULL) // pesquisa na estrutura o cod do livro
+    while (aux != NULL && aux->cod_sistema != cod_livro) // pesquisa na estrutura o cod do livro
         aux = aux->prox;
-
-    if (aux == NULL)
-        return -1; // livro não encontrado
-    else if (aux->reserva == 1)
-        return -2; // livro já reservado
+    
+    if (aux != NULL && aux->cod_sistema == cod_livro) {
+            if (aux->reserva == 1)
+                printf ("\n\t>>> Livro já reservado, por favor, tente outro livro.");
+            else {
+                aux->reserva = 1;
+                printf ("\n\t>>> Livro reservado com sucesso!");
+            }
+    }
     else
-        aux->reserva = 1;
-    return 1;
+        printf ("\n\t>>> Livro não encontrado!");
+    return p;
 }
 
 int main () {
     setlocale (LC_ALL, "Portuguese");
     int opc;
 
-    // alocando dinamicamente um nó
+    // p armazenará a estrutura que contém os ponteiros início e fim da lista
     pont_livros p;
     // inicializando os ponteiros e o contador de livros
     p.inicio = NULL;
@@ -298,14 +302,14 @@ int main () {
     do{
         system ( "clear"); // limpando o terminal
         printf ("-------------------------------------------------------------\n");
-        printf ("\t   >>> Quantidade de livros cadastrados: %d\n", p.quant_livros);
+        printf ("\t   >>> Quantidade de livros cadastrados: %d ", p.quant_livros);
         printf ("\n-------------------------------------------------------------");
         printf ("\n--> Bem vindo, digite uma opção:\n 1. Para cadastrar no inicio\n 2. Para cadastrar no fim\n 3. Para exibir todos os livros\n 4. Para pesquisar um livro\n 5. Para alugar um livro\n 6. Para excluir um livro\n 0. Para sair\n");
         printf (" > Opção: ");
         scanf ("%d", &opc);
 
         switch (opc) {
-            case 0:
+            case 0: // encerrando laço de repetição
                 break; // para não exibir a mensagem do default e ao mesmo tempo, encerrar o laço externo
             case 1: { // cadastrar no início da lista
                 novo_livro_inicio (&p);
@@ -315,8 +319,7 @@ int main () {
                 novo_livro_fim (&p);
                 esperar();
             } break;
-            case 3: {
-                // exibir todos os livros
+            case 3: { // exibir todos os livros
                 exibir_todos_livros (&p);
                 esperar();
             } break;
@@ -333,21 +336,14 @@ int main () {
                     printf("\n> ERRO! Não temos livros cadastrados, favor cadastrar um livro antes.\n");
                 else {
                     // tenho livros na biblioteca e posso tentar aluga-los
-                    int cod_livro, situacao_aluguel; // variavel situacao_aluguel é pra guardar o valor da função alugar
-                    printf ("Digite o código do livro que deseja alugar: ");
+                    int cod_livro; // variavel situacao_aluguel é pra guardar o valor da função alugar
+                    printf ("\n>>> Digite o código do livro que deseja alugar: ");
                     scanf ("%d", &cod_livro);
 
-                    situacao_aluguel = reservar_livro (&p, cod_livro);
-                    
-                    if (situacao_aluguel) // se eu conseguir alugar
-                        printf("Livro alugado com sucesso!");
-                    else if (situacao_aluguel == -1)
-                        printf("Livro não encontrado!");
-                    else
-                        printf("O livro encontra-se alugado.");
+                    p = reservar_livro (p, cod_livro);
                 }
                 esperar();
-                } break;
+            } break;
             case 6: { // excluir livro
                     int cod_livro, excluir; // variavel utilizada para excluir o livro em questão
                     printf ("Digite o código do livro que deseja excluir: ");
@@ -360,7 +356,7 @@ int main () {
                     else // se excluir == -1, livro não encontrado
                         printf("\nLivro não encontrado!\n");
                     esperar();
-                } break;
+            } break;
             default:
                 printf("\n > Digite uma opção válida!");
                 esperar();
