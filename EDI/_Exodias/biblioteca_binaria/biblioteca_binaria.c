@@ -2,13 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 
+// T.A.D biblioteca
 typedef struct livro_biblioteca {
     char titulo[50], autor[50], editora[50], edicao[50];
     int  ano, volume, id, reserva;
     struct livro_biblioteca *dir, *esq;
 } livro_binario;
 
-livro_binario * inserir (livro_binario *aux, int num) {
+// respectivo a inserção binária
+livro_binario * inserir (livro_binario * aux, int num) {
     if (aux == NULL) {
         livro_binario * novo = (livro_binario *) malloc(sizeof(livro_binario));
         novo->esq = NULL;
@@ -39,17 +41,18 @@ livro_binario * inserir (livro_binario *aux, int num) {
         scanf("%d", &novo->volume);
 
         novo->id = num;
-        aux = novo; // equivalente a return novo;
+        aux = novo; // pra retornar no fim da função;
     }
     else if(num < aux->id)
         aux->esq = inserir(aux->esq, num);
     else
         aux->dir = inserir(aux->dir, num);
+
     return aux;
 }
 
 // esta função recebe um nó livro e imprime na tela
-void exibir_livro (livro_binario *p_livro) {
+void exibir_livro (livro_binario * p_livro) {
     puts("\n\n----->>> Exibindo Livro <<<-----");
     printf("> Id: %d\n", p_livro->id);
     printf("> Título do livro: %s\n", p_livro->titulo);
@@ -64,7 +67,7 @@ void exibir_livro (livro_binario *p_livro) {
         printf("> Situação: Disponível para reserva.");
 }
 
-void exibir_em_ordem(livro_binario *aux){
+void exibir_em_ordem(livro_binario * aux){
     if (aux != NULL) {
         exibir_em_ordem(aux->esq);
         exibir_livro(aux);
@@ -72,7 +75,7 @@ void exibir_em_ordem(livro_binario *aux){
     }
 }
 
-void exibir_pre_ordem(livro_binario *aux){
+void exibir_pre_ordem(livro_binario * aux){
     if (aux != NULL) {
         exibir_livro(aux);
         exibir_pre_ordem(aux->esq);
@@ -88,12 +91,14 @@ void exibir_pos_ordem(livro_binario *aux){
     }
 }
 
+// equivalente ao system("pause") do windows
 void esperar(){
     getchar();
     printf("\n\nDigite algo para continuar...");
     getchar();
 }
 
+// verifica se um dado id_livro pertence a árvore
 int consultar(livro_binario * aux, int id_livro, int achou) {
     if(aux != NULL && achou == 0){
         if (aux->id == id_livro) achou = 1; // o nó procurado existe na árvore
@@ -105,16 +110,19 @@ int consultar(livro_binario * aux, int id_livro, int achou) {
     return achou;
 }
 
+// busca um nó na árvore, se o encontrar, exibe-o
 void buscar_livro(livro_binario * aux, int id_livro){
     if(aux->id == id_livro)
         exibir_livro(aux);
     else {
-        if(id_livro > aux->id) buscar_livro(aux->dir, id_livro); // buscar a direita
-        else buscar_livro(aux->esq, id_livro); // buscar a esquerda
+        if(id_livro > aux->id)
+            buscar_livro(aux->dir, id_livro); // buscar a direita
+        else
+            buscar_livro(aux->esq, id_livro); // buscar a esquerda
     }
 }
 
-// Esta função tirar um nó da árvore binária
+// Esta função tira um nó da árvore binária
 livro_binario * remover(livro_binario * aux, int id_livro) {
     livro_binario *p, *p2;
     if(aux->id == id_livro) { // livro encontrado, agora vamos ver os casos de remoção
@@ -149,6 +157,7 @@ livro_binario * remover(livro_binario * aux, int id_livro) {
     return aux;
 }
 
+// Esta função elimina todos os nós da árvore
 livro_binario * derrubar_arvore(livro_binario * aux) {
     if(aux != NULL) {
         aux->esq = derrubar_arvore(aux->esq);
@@ -165,7 +174,7 @@ int main () {
 
     do {
         system("clear");
-        printf ("\n\n\n-------------------------------------------------------------"); // quebrando linha
+        printf ("\n\n\n-------------------------------------------------------------")/
         printf ("\n--> Bem vindo, digite uma opção:\n 1. Para cadastrar um novo livro\n 2. Para exibir os livros em ordem\n 3. Para exibir os livros em pré-ordem\n 4. Para exibir os livros em pós-ordem\n 5. Para buscar livro pelo ID\n 6. Remover livro\n 7. Derrubar árvore (esvaziar árvore)\n 0. Para sair\n");
         printf (" > Opção: ");
         scanf ("%d", &opc);
@@ -193,14 +202,14 @@ int main () {
                     printf("Árvore vazia!!");
                 esperar();
             } break;
-            case 4: {//exibir livro em pós-ordem
+            case 4: { //exibir livro em pós-ordem
                 if (raiz != NULL)
                     exibir_pos_ordem(raiz);
                 else
                     printf("Árvore vazia!!");
                 esperar();
             } break;
-            case 5: {// Buscar livro
+            case 5: { // Buscar livro
                 int id_livro, achou = 0;
                 printf("\n >>> Qual o ID do livro que deseja buscar: ");
                 scanf("%d", &id_livro);
@@ -242,6 +251,7 @@ int main () {
             } break;
             default:
                 printf("\n > Digite uma opção válida!");
+                esperar();
         }
     } while (opc != 0);
 

@@ -3,16 +3,15 @@
 #include <string.h>
 #include <locale.h>
 
-// Fazer o consultar e o excluir FOR HOME
-
+// T.A.D livro da biblioteca
 typedef struct livro_biblioteca {
     char titulo[50], autor[50], editora[50], edicao[50];
     int  ano, volume, cod_sistema, reserva;
     struct livro_biblioteca *prox;
 } livro;
 
-// recebe a estrutura livro que armazena os ponteiros de início e fim da lista
-livro *novo_livro (livro *topo) {
+// recebe a estrutura livro que o armazena no início
+livro * novo_livro (livro * topo) {
     // alocando um nó livro
     livro * novo = (livro *) malloc (sizeof (livro));
 
@@ -44,11 +43,11 @@ livro *novo_livro (livro *topo) {
     printf("> Digite o código do livro no sistema [int]: ");
     scanf("%d", &novo->cod_sistema);
 
-    if (topo == NULL) { // inserção no inicio (LISTA VAZIA)
+    if (topo == NULL) { // inserção no inicio (PILHA VAZIA)
         novo->prox = NULL; // inserção no inicio novo->prox = NULL
         topo = novo;
     }
-    else { // inserção no inicio
+    else { // inserção no inicio com a pilha não vazia
         novo->prox = topo;
         topo = novo;
     }
@@ -72,14 +71,12 @@ void exibir_livro (livro *p_livro) {
         printf("> Situação: Disponível para reserva.");
 }
 
-// função insere novo livro no início da lista
-
-// função exibe todos os livros, recebe por parâmetro o endereço do livro
-void exibir_todos_livros (livro *topo) {
+// função exibe todos os livros da pilha
+void exibir_todos_livros (livro * topo) {
     if (topo == NULL)
-        printf ("\n >> Lista vazia!");
+        printf ("\n >> Pilha vazia!");
     else {
-        livro *aux = topo;
+        livro * aux = topo;
         while (aux != NULL) {
             exibir_livro (aux);
             aux = aux->prox;
@@ -88,15 +85,14 @@ void exibir_todos_livros (livro *topo) {
 }
 
 // função consulta livro na biblioteca
-void consultar_livro (livro *topo) {
+void consultar_livro (livro * topo) {
     int opc, i = 0;
-    livro *aux; // variável auxiliar, ponteiros para um nó (livro)
+    livro * aux; // variável auxiliar, ponteiro para um nó (livro)
     puts("\n\n----->>> Consultando Livro <<<-----");
     printf ("> Você deseja pesquisar um livro por qual campo?\n> 1. Titulo\n> 2. Autor\n> 3. Editora\n> 4. Ano\n> Digite uma opção:");
     scanf("%d", &opc);
 
-    // fflush(stdin); // limpando a memória
-    getchar();
+    getchar(); // limpando a memória
 
     switch (opc) {
         case 1: {
@@ -166,78 +162,33 @@ void consultar_livro (livro *topo) {
     }
 }
 
-livro *excluir_livro (livro *topo, int cod_livro) {
-    getchar(); // esvaziando o buffer
-    // 3 tipos de exclusão: INÍCIO, MEIO E FIM
-    livro *aux = topo, *ant = NULL;
-
-    // printf("\nLivro excluído com sucesso!\n");
-    // printf("\nLivro não encontrado!\n");
-
-    // procurando o livro
-    while (aux != NULL && aux->cod_sistema != cod_livro) {
+// retira o livro que está no topo (remoção pilha)
+livro * excluir_livro (livro * topo) {
+    // pilha vazia
+    if (topo == NULL) {
+        printf("\n  >>> Pilha vazia!\n");
         return topo;
     }
-    if (aux == NULL) { // elemento não encontrado
-        printf("\nLivro não encontrado!\n");
-        return topo;
-    }
-    
-    else if (aux->cod_sistema == cod_livro) { // livro encontrado
-        if (aux == topo) { // exclusão no início
-            topo = topo->prox;
-            free(aux);
-            if (topo == NULL)
-                return NULL;
-            return topo;
-        }
-        else { // exclusão no meio ou fim
-            if (aux == NULL) { // exclusão no fim
-                ant->prox = NULL;
-                // p->fim = ant;
-                free(aux);
-                printf("\nLivro excluído com sucesso!\n");
-            }
-            else { // exclusão no meio
-                ant->prox = aux->prox;
-                free (aux);
-            }
-        }
+    else { // removendo o elemento no topo
+        livro * aux = topo;
+        topo = topo->prox;
+        free(aux);
+        if (topo == NULL)
+            return NULL;
         return topo; // livro removido com sucesso
     }
-    
 }
-
-// função faz a reserva do livro, retorna 1 se reservar, -1 se erro, -2 se já estiver reservado
-int reservar_livro (livro *topo, int cod_livro) {
-    livro *aux = topo;
-    while (aux->cod_sistema != cod_livro && aux != NULL) // pesquisa na estrutura o cod do livro
-        aux = aux->prox;
-    
-    if (aux == NULL)
-        return -1; // livro não encontrado
-    else if (aux->reserva == 1)
-        return -2; // livro já reservado
-    else
-        aux->reserva = 1;
-    return 1;
-}
-
-
-// Inserção Início e Fim - OK
-// Pesquisar livro OK
-// Excluir livro OK
 
 int main () {
     setlocale (LC_ALL, "Portuguese");
     int opc;
 
     // cabeça
-    livro *topo = NULL;
+    livro * topo = NULL;
 
     do {
         printf ("\n\n\n-------------------------------------------------------------"); // quebrando linha
-        printf ("\n--> Bem vindo, digite uma opção:\n 1. Para cadastrar um livro\n 2. Para exibir todos os livros\n 3. Para pesquisar um livro\n 4. Para alugar um livro\n 5. Para excluir um livro\n 0. Para sair\n");
+        printf ("\n--> Bem vindo, digite uma opção:\n 1. Para cadastrar um livro\n 2. Para exibir todos os livros\n 3. Para pesquisar um livro\n 4. Para excluir o livro do topo\n 0. Para sair\n");
         printf (" > Opção: ");
         scanf ("%d", &opc);
 
@@ -252,29 +203,13 @@ int main () {
             case 3: // pesquisar livro
                 consultar_livro (topo);
                 break;
-            case 4: { // alugar livro
-                    // tenho livros na biblioteca e posso tentar aluga-los
-                    int cod_livro, situacao_aluguel; // variavel situacao_aluguel é pra guardar o valor da função alugar
-                    printf ("Digite o código do livro que deseja alugar: ");
-                    scanf ("%d", &cod_livro);
+            case 4: { // excluir livro
+                    int excluir; // variavel utilizada para excluir o livro em questão
+                    printf ("Removendo livro do topo...");
 
-                    situacao_aluguel = reservar_livro (topo, cod_livro);
-
-                    if (situacao_aluguel) // se eu conseguir alugar
-                        printf("\n  >>> Livro alugado com sucesso!");
-                    else if (situacao_aluguel == -1)
-                        printf("\n  >>> Livro não encontrado!");
-                    else
-                        printf("O livro encontra-se alugado.");
-                }
-                break;
-            case 5: { // excluir livro
-                    int cod_livro, excluir; // variavel utilizada para excluir o livro em questão
-                    printf ("Digite o código do livro que deseja excluir: ");
-                    scanf ("%d", &cod_livro);
-
-                    topo = excluir_livro (topo, cod_livro);
+                    topo = excluir_livro (topo);
             }
+            break;
             default:
                 printf("\n > Digite uma opção válida!");
         }
