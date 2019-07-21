@@ -3,49 +3,29 @@
 #include <string.h>
 #include <locale.h>
 
-/*  Livro:
-        - Título
-        - Autor
-        - Editora
-        - Edição
-        - Ano
-        - Volume
-        - Número no sistema
-
-        # Reservas
-        int reserva = 0 se não reservado, senão = 1
-
-    -------
-    Operações básicas
-        Inserir
-        Consultar
-        Excluir
-*/
-
-
-// Fazer o consultar e o excluir FOR HOME
-
+// T.A.D livro
 typedef struct livro_biblioteca {
     char titulo[50], autor[50], editora[50], edicao[50];
     int  ano, volume, cod_sistema, reserva;
-    struct livro_biblioteca *prox;
+    struct livro_biblioteca * prox;
 } livro;
 
+// Estrutura que armazena os ponteiros do início e fim da lista
 typedef struct livros_ponteiros {
-    livro *inicio;
-    livro *fim;
+    livro * inicio;
+    livro * fim;
     int quant_livros;
 } pont_livros;
 
 // recebe a estrutura pont_livros que armazena os ponteiros de início e fim da lista
-void novo_livro_fim(pont_livros *p){
+// Inserção no fim da lista
+void novo_livro_fim (pont_livros * p) {
     // alocando um nó livro
     livro * novo = (livro *) malloc (sizeof (livro));
 
     puts("\n\n----->>> Inserindo livro <<<-----");
-    fflush(stdin); // limpando o buffer
+    getchar(); // limpando o buffer
 
-    getchar();
     printf("> Digite o titulo do livro [string]: ");
     scanf("%[^\n]", novo->titulo);
     getchar();
@@ -71,7 +51,7 @@ void novo_livro_fim(pont_livros *p){
     scanf("%d", &novo->cod_sistema);
 
     novo->reserva = 0; // por padrão, livro não reservado
-    p->quant_livros+=1;
+    p->quant_livros += 1; // para o controle de quantos livros armazenados
 
     novo->prox = NULL; // inserção no inicio ou fim, novo->prox = NULL
     // inserção no inicio (LISTA VAZIA)
@@ -79,14 +59,21 @@ void novo_livro_fim(pont_livros *p){
         p->inicio = novo;
         p->fim = novo;
     }
-    else { // inserção no fim
+    else { // inserção no fim (modo lista)
         (p->fim)->prox = novo;
         p->fim = novo;
     }
 }
 
+// equivalente ao pause break do windows
+void esperar(){
+    getchar();
+    printf("\n\nDigite algo para continuar...");
+    getchar();
+}
+
 // esta função recebe um nó livro e imprime na tela
-void exibir_livro (livro *p_livro) {
+void exibir_livro (livro * p_livro) {
     puts("\n\n----->>> Exibindo Livro <<<-----");
     printf("> Cód: %d\n", p_livro->cod_sistema);
     printf("> Título do livro: %s\n", p_livro->titulo);
@@ -108,9 +95,8 @@ void novo_livro_inicio(pont_livros *p) {
 
     puts("\n\n----->>> Inserindo livro <<<-----");
 
-    fflush(stdin); // limpando o buffer
+    getchar();// limpando o buffer
 
-    getchar();
     printf("> Digite o titulo do livro [string]: ");
     scanf("%[^\n]", novo->titulo);
     getchar();
@@ -136,6 +122,7 @@ void novo_livro_inicio(pont_livros *p) {
     scanf("%d", &novo->cod_sistema);
 
     novo->reserva = 0; // por padrão, livro não reservado
+    p->quant_livros += 1; // para o controle de quantos livros armazenados
 
     if (p->inicio == NULL && p->fim == NULL) { // inserção em lista vazia
         p->inicio = novo;
@@ -150,12 +137,12 @@ void novo_livro_inicio(pont_livros *p) {
     printf("\n > Inserção realizada com sucesso! \n");
 }
 
-// função exibe todos os livros, recebe por parâmetro o endereço do livro
-void exibir_todos_livros (pont_livros *p) {
+// função exibe todos os livros, recebe por parâmetro o endereço inicial da lista
+void exibir_todos_livros (pont_livros * p) {
     if (p->inicio == NULL)
         printf ("\n >> Lista vazia!");
     else {
-        livro *aux = p->inicio;
+        livro * aux = p->inicio;
         while (aux != NULL) {
             exibir_livro (aux);
             aux = aux->prox;
@@ -164,18 +151,17 @@ void exibir_todos_livros (pont_livros *p) {
 }
 
 // função consulta livro na biblioteca
-void consultar_livro (pont_livros *p) {
+void consultar_livro (pont_livros * p) {
     int opc, i = 0;
-    livro *aux; // variável auxiliar, ponteiros para um nó (livro)
+    livro * aux; // variável auxiliar, ponteiros para um nó (livro)
     puts("\n\n----->>> Consultando Livro <<<-----");
-    printf ("> Você deseja pesquisar um livro por qual campo?\n> 1. Titulo\n> 2. Autor\n> 3. Editora\n> 4. Ano\n> Digite uma opção:");
+    printf ("> Você deseja pesquisar um livro por qual campo?\n> 1. Titulo\n> 2. Autor\n> 3. Editora\n> 4. Ano\n> 5. Código do livro\n> Digite uma opção:");
     scanf("%d", &opc);
 
-    fflush(stdin); // limpando a memória
+    getchar(); // limpando a memória
 
     switch (opc) {
-        case 1: {
-                // pesquisa por Título
+        case 1: { // pesquisa por Título
                 char titulo[60];
                 
                 printf("> Digite o título do livro: ");
@@ -188,10 +174,8 @@ void consultar_livro (pont_livros *p) {
                         exibir_livro(aux);
                     aux = aux->prox;
                 }
-                break;
-        }
-        case 2: {
-                // pesquisa por Autor
+        } break;
+        case 2: { // pesquisa por Autor
                 char nome_autor[60];
 
                 printf ("> Digite o nome do autor: ");
@@ -204,10 +188,8 @@ void consultar_livro (pont_livros *p) {
                         exibir_livro(aux);
                     aux = aux->prox;
                 }
-            break;
-        }
-        case 3: {
-            // pesquisa por Editora
+        } break;
+        case 3: { // pesquisa por Editora
             char nome_editora[60];
             
             printf ("> Digite o nome da editora: ");
@@ -220,10 +202,8 @@ void consultar_livro (pont_livros *p) {
                     exibir_livro(aux);
                 aux = aux->prox;
             }
-            break;
-        }
-        case 4: {
-            // pesquisa por Ano
+        } break;
+        case 4: { // pesquisa por Ano
                 int ano;
                 printf ("> Digite o ano de publicação: ");
                 scanf ("%d", &ano);
@@ -234,17 +214,32 @@ void consultar_livro (pont_livros *p) {
                         exibir_livro(aux);
                     aux = aux->prox;
                 }
-            break;
-        }
+        } break;
+        case 5: { // pesquisando pelo ID
+            int id;
+
+            printf ("> Digite o código do livro: ");
+            scanf ("%d", &id);
+
+            aux = p->inicio; // aux aponta para o começo da lista
+            while (aux != NULL) { // enquanto a lista não acabar, percorrê-la
+                if (aux->cod_sistema == id) {// encontrei o livro
+                    exibir_livro (aux);
+                    break; // não precisa mais procurar
+                }
+                aux = aux->prox;
+            }
+        } break;
         default:
             printf("> Valores inválidos.");
+            esperar();
     }
 }
 
-// excluir o livro cod_livro
-int excluir_livro (pont_livros *p, int cod_livro) {
+// exclui livro cujo cod foi-me passado
+int excluir_livro (pont_livros * p, int cod_livro) {
     // 3 tipos de exclusão: INÍCIO, MEIO E FIM
-    livro *aux = p->inicio, *ant = NULL;
+    livro * aux = p->inicio, * ant = NULL;
 
     // procurando o livro
     while (aux != NULL && aux->cod_sistema != cod_livro) {
@@ -274,11 +269,12 @@ int excluir_livro (pont_livros *p, int cod_livro) {
 }
 
 // função faz a reserva do livro, retorna 1 se reservar, -1 se erro, -2 se já estiver reservado
-int reservar_livro (pont_livros *p, int cod_livro) {
-    livro *aux = p->inicio;
+int reservar_livro (pont_livros * p, int cod_livro) {
+    livro * aux = p->inicio;
+    
     while (aux->cod_sistema != cod_livro && aux != NULL) // pesquisa na estrutura o cod do livro
         aux = aux->prox;
-    
+
     if (aux == NULL)
         return -1; // livro não encontrado
     else if (aux->reserva == 1)
@@ -288,43 +284,51 @@ int reservar_livro (pont_livros *p, int cod_livro) {
     return 1;
 }
 
-
-// Inserção Início e Fim - OK
-// Pesquisar livro OK
-// Excluir livro OK
-
 int main () {
     setlocale (LC_ALL, "Portuguese");
     int opc;
 
     // alocando dinamicamente um nó
     pont_livros p;
-    // resetando os ponteiros e o contador de livros
+    // inicializando os ponteiros e o contador de livros
     p.inicio = NULL;
     p.fim = NULL;
     p.quant_livros = 0;
 
     do{
-        printf ("\n\n\n-------------------------------------------------------------"); // quebrando linha
+        system ( "clear"); // limpando o terminal
+        printf ("-------------------------------------------------------------\n");
+        printf ("\t   >>> Quantidade de livros cadastrados: %d\n", p.quant_livros);
+        printf ("\n-------------------------------------------------------------");
         printf ("\n--> Bem vindo, digite uma opção:\n 1. Para cadastrar no inicio\n 2. Para cadastrar no fim\n 3. Para exibir todos os livros\n 4. Para pesquisar um livro\n 5. Para alugar um livro\n 6. Para excluir um livro\n 0. Para sair\n");
         printf (" > Opção: ");
         scanf ("%d", &opc);
 
         switch (opc) {
-            case 0: break;
-            case 1: // cadastrar no início
-                    novo_livro_inicio (&p);
-                break;
-            case 2: // cadastrar no fim
-                    novo_livro_fim (&p);
-                break;
-            case 3: // exibir todos os livros
-                    exibir_todos_livros (&p);
-                break;
-            case 4: // pesquisar livro
-                consultar_livro (&p);
-                break;
-            case 5: // alugar livro
+            case 0:
+                break; // para não exibir a mensagem do default e ao mesmo tempo, encerrar o laço externo
+            case 1: { // cadastrar no início da lista
+                novo_livro_inicio (&p);
+                esperar();
+            } break;
+            case 2: { // cadastrar no fim da lista
+                novo_livro_fim (&p);
+                esperar();
+            } break;
+            case 3: {
+                // exibir todos os livros
+                exibir_todos_livros (&p);
+                esperar();
+            } break;
+            case 4: { // pesquisar livro
+                if (p.quant_livros == 0)
+                    printf("\n> ERRO! Não temos livros cadastrados, favor cadastrar um livro antes.\n");
+                else {
+                    consultar_livro (&p);
+                }
+                esperar();
+            } break;
+            case 5: { // alugar livro
                 if (p.quant_livros == 0)
                     printf("\n> ERRO! Não temos livros cadastrados, favor cadastrar um livro antes.\n");
                 else {
@@ -342,7 +346,8 @@ int main () {
                     else
                         printf("O livro encontra-se alugado.");
                 }
-                break;
+                esperar();
+                } break;
             case 6: { // excluir livro
                     int cod_livro, excluir; // variavel utilizada para excluir o livro em questão
                     printf ("Digite o código do livro que deseja excluir: ");
@@ -354,9 +359,11 @@ int main () {
                         printf("\nLivro excluído com sucesso!\n");
                     else // se excluir == -1, livro não encontrado
                         printf("\nLivro não encontrado!\n");
-            }
+                    esperar();
+                } break;
             default:
                 printf("\n > Digite uma opção válida!");
+                esperar();
         }
     } while (opc != 0);
     
