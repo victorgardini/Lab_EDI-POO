@@ -10,10 +10,11 @@
 /* Compilador: gcc (Ubuntu 7.4.0-1ubuntu1~18.04.1) 7.4.0 */
 /*********************************************************/
 
+// T.A.D biblioteca
 typedef struct livro_avl {
     char titulo[50], autor[50], editora[50], edicao[50];
     int  ano, volume, id, reserva, altd, alte;
-    struct livro_avl *dir, *esq;
+    struct livro_avl * dir, * esq;
 } livro_avl;
 
 // Estrutura que armazena os usuários que reservaram livro
@@ -24,7 +25,7 @@ typedef struct usuario {
 } usuario;
 
 // esta função recebe um nó livro e imprime na tela
-void exibir_livro (livro_avl *p_livro) {
+void exibir_livro (livro_avl * p_livro) {
     puts("\n\n----->>> Exibindo Livro <<<-----");
     printf("> Id: %d\n", p_livro->id);
     printf("> Título do livro: %s\n", p_livro->titulo);
@@ -71,7 +72,7 @@ livro_avl * rotacao_direita(livro_avl * aux) {
     if (aux->esq == NULL)
         aux->alte = 0;
     else
-        if(aux->esq->alte > aux->esq->altd)
+        if (aux->esq->alte > aux->esq->altd)
             aux->alte = aux->esq->alte + 1;
         else
             aux->alte = aux->esq->altd + 1;
@@ -86,9 +87,9 @@ livro_avl * rotacao_direita(livro_avl * aux) {
 livro_avl * balanceamento(livro_avl * aux){
     int d, df;
     d = aux->altd - aux->alte;
-    if(d == 2) {
+    if (d == 2) {
         df = aux->dir->altd - aux->dir->alte;
-        if(df >= 0)
+        if (df >= 0)
             aux = rotacao_esquerda(aux);
         else {
             aux->dir = rotacao_direita(aux->dir);
@@ -159,7 +160,7 @@ livro_avl * inserir (livro_avl * aux, int num){
     return aux;
 }
 
-void exibir_em_ordem(livro_avl *aux){
+void exibir_em_ordem(livro_avl * aux){
     if (aux != NULL) {
         exibir_em_ordem(aux->esq);
         exibir_livro(aux);
@@ -167,7 +168,7 @@ void exibir_em_ordem(livro_avl *aux){
     }
 }
 
-void exibir_pre_ordem(livro_avl *aux){
+void exibir_pre_ordem(livro_avl * aux){
     if (aux != NULL) {
         exibir_livro(aux);
         exibir_pre_ordem(aux->esq);
@@ -175,7 +176,7 @@ void exibir_pre_ordem(livro_avl *aux){
     }
 }
 
-void exibir_pos_ordem(livro_avl *aux){
+void exibir_pos_ordem(livro_avl * aux){
     if (aux != NULL) {
         exibir_pos_ordem(aux->esq);
         exibir_pos_ordem(aux->dir);
@@ -266,7 +267,7 @@ int reservar_livro (livro_avl * aux, usuario ** lista_usuario, int achou, int id
                 printf("\n >>> Livro reservado com sucesso!!!");
             }
         }
-        else if(id_livro < aux->id)
+        else if (id_livro < aux->id)
             achou = reservar_livro(aux->esq, lista_usuario, achou, id_livro);
         else
             achou = reservar_livro(aux->dir, lista_usuario, achou, id_livro);
@@ -381,7 +382,7 @@ int main () {
             case 5: {
                 int achou = 0;
             
-                if(raiz == NULL)
+                if (raiz == NULL)
                         printf("\n >>> Árvore vazia!!!");
                 else {
                     do {
@@ -394,7 +395,7 @@ int main () {
                     } while (id_livro <= 0);
                 
                     // verificando se o livro está na árvore
-                    if(consultar(raiz, id_livro, achou))
+                    if (consultar(raiz, id_livro, achou))
                         buscar_livro(raiz, id_livro);
                     else
                         printf("\n >>> Livro não encontrado!");
@@ -403,7 +404,7 @@ int main () {
             } break;
             // Remover um nó da árvore
             case 6:{
-                if(raiz == NULL)
+                if (raiz == NULL)
                     printf("\n >>> Árvore vazia!!!");
                 else {
                     int achou = 0;
@@ -451,7 +452,7 @@ int main () {
                         if (id_livro <= 0)
                             printf("\n>>> Digite um valor maior que 0");
                         else {
-                            if(consultar(raiz, id_livro, 0)) // o livro encontra-se na biblioteca
+                            if (consultar(raiz, id_livro, 0)) // o livro encontra-se na biblioteca
                                 reservar_livro(raiz, &lista_reservas, 0, id_livro);
                             else
                                 printf("\n >>> Livro não encontrado!");
