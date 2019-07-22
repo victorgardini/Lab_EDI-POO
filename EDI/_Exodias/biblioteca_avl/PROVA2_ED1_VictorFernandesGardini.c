@@ -1,63 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 
-typedef struct livro_biblioteca {
+/*********************************************************/
+/* Nome: Victor Fernandes Gardini         	 	 	   	 */
+/* RA: 181.044.013                        	 	 	   	 */
+/* Exercício: Biblioteca EDI versão avl                  */
+/* Compilador: gcc (Ubuntu 7.4.0-1ubuntu1~18.04.1) 7.4.0 */
+/*********************************************************/
+
+typedef struct livro_avl {
     char titulo[50], autor[50], editora[50], edicao[50];
-    int  ano, volume, id, reserva;
-    struct livro_biblioteca *dir, *esq;
+    int  ano, volume, id, reserva, altd, alte;
+    struct livro_avl *dir, *esq;
 } livro_avl;
 
-livro_avl * inserir (livro_avl * aux, int num){
-    if (aux == NULL) {
-        livro_avl * novo = (livro_avl *) malloc(sizeof(livro_avl));
-        novo->esq = NULL;
-        novo->dir = NULL;
-
-        puts("\n\n----->>> Inserindo livro <<<-----");
-        getchar(); // limpando o buffer
-        
-        printf("> Digite o titulo do livro [string]: ");
-        scanf("%[^\n]", novo->titulo);
-        getchar();
-
-        printf("> Digite o autor do livro [string]: ");
-        scanf("%[^\n]", novo->autor);
-        getchar();
-
-        printf("> Digite a editora do livro [string]: ");
-        scanf("%[^\n]", novo->editora);
-        getchar();
-
-        printf("> Digite a edição do livro [string]: ");
-        scanf("%[^\n]", novo->edicao);
-
-        printf("> Digite o ano de publicação [int]: ");
-        scanf("%d", &novo->ano);
-
-        printf("> Digite o volume da edição [int]: ");
-        scanf("%d", &novo->volume);
-
-        novo->id = num;
-        novo->reserva = 0; // livro não reservado
-        aux = novo; // equivalente a return novo;
-    }
-    else { // arvore não vazia, procurando para inserir
-        if (num > aux->num) { // inserir na direita
-            aux->dir = inserir(aux->dir, num);
-            if (aux->esq->altd > aux->esq->altd)
-                aux->altd = aux->esq->altd + 1;
-            else
-                aux->alte = aux->dir->altd + 1;
-            aux = balanceamento(aux);
-        }
-        else { // inserir na esquerda
-            aux->esq = inserir(aux->esq, num);
-            aux = balanceamento(aux);
-        }
-    }
-    return aux;
-}
+// Estrutura que armazena os usuários que reservaram livro
+typedef struct usuario {
+    char nome[50];
+    int id_livro; // vetor que armazena os id's dos livros que este usuário reservou
+    struct usuario * prox;
+} usuario;
 
 // esta função recebe um nó livro e imprime na tela
 void exibir_livro (livro_avl *p_livro) {
@@ -98,7 +62,7 @@ livro_avl * rotacao_esquerda(livro_avl * aux) {
 }
 
 livro_avl * rotacao_direita(livro_avl * aux) {
-    livro_avl * aux1, aux2;
+    livro_avl * aux1, *aux2;
     aux1 = aux->esq;
     aux2 = aux1->dir;
     aux->esq = aux2;
@@ -143,6 +107,58 @@ livro_avl * balanceamento(livro_avl * aux){
     return aux;
 }
 
+// inserir um novo nó avl
+livro_avl * inserir (livro_avl * aux, int num){
+    if (aux == NULL) {
+        livro_avl * novo = (livro_avl *) malloc(sizeof(livro_avl));
+        novo->esq = NULL;
+        novo->dir = NULL;
+
+        puts("\n\n----->>> Inserindo livro <<<-----");
+        getchar(); // limpando o buffer
+
+        printf("> Digite o titulo do livro [string]: ");
+        scanf("%[^\n]", novo->titulo);
+        getchar();
+
+        printf("> Digite o autor do livro [string]: ");
+        scanf("%[^\n]", novo->autor);
+        getchar();
+
+        printf("> Digite a editora do livro [string]: ");
+        scanf("%[^\n]", novo->editora);
+        getchar();
+
+        printf("> Digite a edição do livro [string]: ");
+        scanf("%[^\n]", novo->edicao);
+
+        printf("> Digite o ano de publicação [int]: ");
+        scanf("%d", &novo->ano);
+
+        printf("> Digite o volume da edição [int]: ");
+        scanf("%d", &novo->volume);
+
+        novo->id = num;
+        novo->reserva = 0; // livro não reservado
+        aux = novo; // equivalente a return novo;
+    }
+    else { // arvore não vazia, procurando para inserir
+        if (num > aux->id) { // inserir na direita
+            aux->dir = inserir(aux->dir, num);
+            if (aux->esq->altd > aux->esq->altd)
+                aux->altd = aux->esq->altd + 1;
+            else
+                aux->alte = aux->dir->altd + 1;
+            aux = balanceamento(aux);
+        }
+        else { // inserir na esquerda
+            aux->esq = inserir(aux->esq, num);
+            aux = balanceamento(aux);
+        }
+    }
+    return aux;
+}
+
 void exibir_em_ordem(livro_avl *aux){
     if (aux != NULL) {
         exibir_em_ordem(aux->esq);
@@ -174,6 +190,37 @@ void esperar(){
     getchar();
 }
 
+// inserção início de uma lista
+usuario * cadastrar_usuario_livro (usuario * lista_usuarios, int id_livro) {
+    // alocando um nó livro
+    usuario * novo = (usuario *) malloc (sizeof (usuario));
+
+    getchar();
+    printf("> Digite o nome do usuário: ");
+    scanf("%[^\n]", novo->nome);
+    getchar();
+
+    novo->id_livro = id_livro;
+
+    if (lista_usuarios == NULL) // inserção em lista vazia
+        novo->prox = NULL;
+    else
+        novo->prox = lista_usuarios;
+    return novo;
+}
+
+// lista todos os livros reservados, e respectivamente, os livros
+void exibir_livros_reservados (usuario * lista_usuarios) {
+    usuario * aux = lista_usuarios;
+    while (aux != NULL) {
+        printf("\n\nUsuário: %s", aux->nome);
+        printf("\nCód. Livro: %d", aux->id_livro);
+        aux = aux->prox;
+        esperar();
+    }    
+}
+
+// retorna 1 caso o nó esteja na árvore
 int consultar(livro_avl * aux, int id_livro, int achou) {
     if(aux != NULL && achou == 0){
         if (aux->id == id_livro) achou = 1; // o nó procurado existe na árvore
@@ -185,6 +232,7 @@ int consultar(livro_avl * aux, int id_livro, int achou) {
     return achou;
 }
 
+// Percorre a árvore e exibe o livro em questão
 void buscar_livro(livro_avl * aux, int id_livro){
     if(aux->id == id_livro)
         exibir_livro(aux);
@@ -194,6 +242,7 @@ void buscar_livro(livro_avl * aux, int id_livro){
     }
 }
 
+// excluir a árvore inteira
 livro_avl * derrubar_arvore(livro_avl * aux) {
     if(aux != NULL) {
         aux->esq = derrubar_arvore(aux->esq);
@@ -203,56 +252,148 @@ livro_avl * derrubar_arvore(livro_avl * aux) {
     return NULL;
 }
 
+int reservar_livro (livro_avl * aux, usuario ** lista_usuario, int achou, int id_livro) {
+    if (aux != NULL && achou == 0) {
+        if (aux->id == id_livro) {
+            achou = 1; // o nó procurado existe na árvore
+            // verificando se eu posso reservar o livro
+            if(aux->reserva == 1) // livro já reservado
+                printf("\n >>> O livro solicitado já encontra-se reservado!");
+            else {
+                aux->reserva = 1; // reservando o livro
+                // salvando o livro no usuário (cadastrando usuário)
+                *lista_usuario = cadastrar_usuario_livro(*lista_usuario, aux->id);
+                printf("\n >>> Livro reservado com sucesso!!!");
+            }
+        }
+        else if(id_livro < aux->id)
+            achou = reservar_livro(aux->esq, lista_usuario, achou, id_livro);
+        else
+            achou = reservar_livro(aux->dir, lista_usuario, achou, id_livro);
+    }
+    return achou;
+}
+
+// função remover um nó da árvore
+livro_avl * remover(livro_avl * aux, int num) {
+    livro_avl * p, *p2;
+    if (aux->id == num) {
+        if (aux->esq == aux->dir) { // o elemento a ser removido não tem filhos
+            free(aux);
+            return NULL;
+        }
+        else if (aux->esq == NULL) { // o elemento a ser removido não tem filhos para a esquerda
+            p = aux->dir;
+            free(aux);
+            return p;
+        }
+        else if (aux->dir == NULL) { // o elemento a ser removido não tem filhos para a direita
+            p = aux->esq;
+            free(aux);
+            return p;
+        }
+        else { // o elemento a ser removido tem filhos para ambos os lados
+            p2 = aux->dir;
+            p = aux->dir;
+            while (p->esq != NULL)
+                p = p->esq;
+            p->esq = aux->esq;
+            free(aux);
+            return p2;
+        }
+    }
+    else if (aux->id < num)
+        aux->dir = remover(aux->dir, num);
+    else
+        aux->esq = remover(aux->esq, num);
+    return aux;
+}
+
 int main () {
+    // variáveis de controle
     int opc, id_livro;
-    // Raiz
+
+    // compatibilidade terminal windows
+    setlocale(LC_ALL, "Portuguese");
+    
+    // Árvore binária de livros
     livro_avl * raiz = NULL;
+
+    // Lista de livros reservados
+    usuario * lista_reservas = NULL;
 
     do {
         system("clear");
-        printf ("\n\n\n-------------------------------------------------------------"); // quebrando linha
-        printf ("\n--> Bem vindo, digite uma opção:\n 1. Para cadastrar um novo livro\n 2. Para exibir os livros em ordem\n 3. Para exibir os livros em pré-ordem\n 4. Para exibir os livros em pós-ordem\n 5. Para buscar livro pelo ID\n 6. Remover livro\n 7. Derrubar árvore (esvaziar árvore)\n 0. Para sair\n");
+        printf ("\n\n\n-------------------------------------------------------------");
+        printf ("\n--> Bem vindo, digite uma opção:\n 1. Para cadastrar um novo livro\n 2. Para exibir os livros em ordem\n 3. Para exibir os livros em pré-ordem\n 4. Para exibir os livros em pós-ordem\n 5. Para buscar livro pelo ID\n 6. Remover livro\n 7. Derrubar árvore (esvaziar árvore)\n 8. Reservar livro\n 9. Exibir todos os livros reservados\n 0. Para sair\n");
         printf (" > Opção: ");
         scanf ("%d", &opc);
 
         switch (opc) {
-            case 0: break; // esta opção está aqui para que quando o usuário digite 0 não exiba a mensagem do default
-            case 1: { // novo livro na árvore
-                    printf("\nDigite o ID do novo livro: ");
-                    scanf("%d", &id_livro);
+            // esta opção garante que 0 não exiba a mensagem do default
+            case 0: break;
+            // novo livro na árvore
+            case 1: {
+                    do {
+                        printf("\n >>> Qual o ID do livro que deseja cadastrar: ");
+                        scanf("%d", &id_livro);
+
+                        // validando a entrada
+                        if (id_livro <= 0)
+                            printf("\n\t>>> Digite um valor maior que 0\n");
+        
+                        // verificando se o livro já não está na árvore
+                        if (consultar(raiz, id_livro, 0)) {
+                            printf("\n\t>>> Erro! Este código de livro já está cadastrado\n");
+                            id_livro = -1; // para não sair do laço
+                        }
+                    } while (id_livro <= 0);
+
                     raiz = inserir(raiz, id_livro);
                     printf("\n >>> Inserção feita com sucesso!");
                     esperar();
             } break;
-            case 2: { // exibir livro em ordem
+            // exibir livro em ordem
+            case 2: {
                 if (raiz != NULL)
                     exibir_em_ordem(raiz);
                 else
-                    printf("Árvore vazia!!");
+                    printf("\n >>> Árvore vazia!!");
                 esperar();
             } break;
-            case 3: { // exibir livro em pré-ordem
+            // exibir livro em pré-ordem
+            case 3: {
                 if (raiz != NULL)
                     exibir_pre_ordem(raiz);
                 else
-                    printf("Árvore vazia!!");
+                    printf("\n >>> Árvore vazia!!");
                 esperar();
             } break;
-            case 4: {//exibir livro em pós-ordem
+            //exibir livro em pós-ordem
+            case 4: {
                 if (raiz != NULL)
                     exibir_pos_ordem(raiz);
                 else
-                    printf("Árvore vazia!!");
+                    printf("\n >>> Árvore vazia!!");
                 esperar();
             } break;
-            case 5: {// Buscar livro
-                int id_livro, achou = 0;
-                printf("\n >>> Qual o ID do livro que deseja buscar: ");
-                scanf("%d", &id_livro);
-
-                // verificando se o livro está na árvore
-                if(raiz == NULL) printf("\n >>> Árvore vazia!!!");
+            // Buscar livro
+            case 5: {
+                int achou = 0;
+            
+                if(raiz == NULL)
+                        printf("\n >>> Árvore vazia!!!");
                 else {
+                    do {
+                        printf("\n >>> Qual o ID do livro que deseja buscar: ");
+                        scanf("%d", &id_livro);
+                        
+                        // validando a entrada
+                        if (id_livro <= 0)
+                            printf("\n>>> Digite um valor maior que 0");
+                    } while (id_livro <= 0);
+                
+                    // verificando se o livro está na árvore
                     if(consultar(raiz, id_livro, achou))
                         buscar_livro(raiz, id_livro);
                     else
@@ -260,12 +401,22 @@ int main () {
                 }
                 esperar();
             } break;
-            case 6:{ // Remover um nó da árvore
-                if(raiz == NULL) printf("\n >>> Árvore vazia!!!");
+            // Remover um nó da árvore
+            case 6:{
+                if(raiz == NULL)
+                    printf("\n >>> Árvore vazia!!!");
                 else {
-                    int id_livro, achou = 0;
-                    printf("\n >>> Qual o ID do livro que você deseja remover: ");
-                    scanf("%d", &id_livro);
+                    int achou = 0;
+
+                    // validando id_livro
+                    do {
+                        printf("\n >>> Qual o ID do livro que você deseja remover: ");
+                        scanf("%d", &id_livro);
+                    
+                        // validando a entrada
+                        if (id_livro <= 0)
+                            printf("\n>>> Digite um valor maior que 0");
+                    } while (id_livro <= 0);
                     
                     // verificando se o livro pertence a árvore
                     if (consultar(raiz, id_livro, achou)) {
@@ -273,15 +424,54 @@ int main () {
                         raiz = remover(raiz, id_livro);
                         printf("\n >>> Livro removido com sucesso!");
                     }
-                    else printf("\n >>> Livro não encontrado!");
-                    esperar();                    
+                    else
+                        printf("\n >>> Livro não encontrado!");                  
                 }
+                esperar();
             } break;
-            case 7: { // Esvaziar árvore
+            // Esvaziar árvore
+            case 7: {
                 if(raiz == NULL) printf("\n >>> Árvore já está vazia!!!");
                 else {
                     raiz = derrubar_arvore(raiz);
                     printf("\n >>> Árvore derrubada com sucesso!");
+                }
+                esperar();
+            } break;
+            // Reservar livro 
+            case 8: {
+                // verificando se o livro está na árvore
+                if(raiz == NULL)
+                    printf("\n >>> Árvore vazia!!!");
+                else {
+                    do {
+                        printf("\n >>> Qual o ID do livro que deseja reservar: ");
+                        scanf("%d", &id_livro);
+                        
+                        if (id_livro <= 0)
+                            printf("\n>>> Digite um valor maior que 0");
+                        else {
+                            if(consultar(raiz, id_livro, 0)) // o livro encontra-se na biblioteca
+                                reservar_livro(raiz, &lista_reservas, 0, id_livro);
+                            else
+                                printf("\n >>> Livro não encontrado!");
+                        }                        
+                    } while (id_livro <= 0);
+                    
+                }
+                esperar();
+            } break;
+            // exibir todos os livros reservados
+            case 9: {
+                usuario * aux = lista_reservas;
+                if (aux == NULL)
+                    printf("\n\n >>> Não há livros reservados!!");
+                else {
+                    while (aux != NULL) {
+                        printf("\n\n >>> Usuário: %s", aux->nome);
+                        printf("\n >>> Código do livro: %d", aux->id_livro);
+                        aux = aux->prox;
+                    }
                 }
                 esperar();
             } break;
