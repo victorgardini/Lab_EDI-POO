@@ -20,7 +20,7 @@ typedef struct livro_avl {
 // Estrutura que armazena os usuários que reservaram livro
 typedef struct usuario {
     char nome[50];
-    int id_livro; // vetor que armazena os id's dos livros que este usuário reservou
+    int id_livro; // vetor que armazena os id do livro que o usuário reservou
     struct usuario * prox;
 } usuario;
 
@@ -310,7 +310,62 @@ livro_avl * remover(livro_avl * aux, int num) {
     return aux;
 }
 
+// função que altera o status de reserva de um livro binário
+int cancela_reserva_livro_binario (livro_avl * aux, int cod_livro, int achou) {
+    if (aux != NULL && achou == 0) {
+        if (aux->id == cod_livro) { // livro encontrado
+            aux->reserva = 0; // reserva cancelada
+            achou = 1;
+            printf("\n >>> Cancelando a reserva do livro!!!");
+        }
+        else if (cod_livro < aux->id)
+            achou = cancela_reserva_livro_binario (aux->esq, cod_livro, achou);
+        else
+            achou = cancela_reserva_livro_binario (aux->dir, cod_livro, achou);
+    }
+    return achou;
+}
+
+// algoritmo de busca e remoção de nós em uma lista linear
+usuario * BuscaRemocaoP (usuario * lista_usuarios, int cod_livro, livro_avl * raiz) {
+    usuario * ant, * aux;
+    aux = lista_usuarios;
+    ant = NULL;
+    // percorrendo a lista a procura do elemento e localizando a posição de remoção
+    while (aux != NULL && aux->id_livro != cod_livro) {
+        ant = aux;
+        aux = aux->prox;
+    }
+    if (aux != NULL){ // usuario encontrado
+        // antes de remover o nó da lista: mudar o status de reservado
+        cancela_reserva_livro_binario(raiz, cod_livro, 0);
+        printf("\n >>> Reserva cancelada com sucesso!!!");
+        // removendo o nó
+        if (ant == NULL) // remoção do 1 nó da lista
+            lista_usuarios = aux->prox;
+        else // remoção no meio ou final da lista
+            ant->prox = aux->prox;
+        
+        free(aux);
+    }
+    return lista_usuarios; // retornando a lista    
+}
+
 int main () {
+    // apresentação
+    system("clear");
+    printf("|----------------------------------------------------------------------------------------|");
+    printf("\n| >>> Apresentação:                                                                      |");
+    printf("\n|----------------------------------------------------------------------------------------|");
+    printf("\n| >>> Nome: Victor Fernandes Gardini         	 	                                 |");
+    printf("\n| >>> Exercício: Biblioteca EDI versão AVL                                               |");
+    printf("\n| >>> Disciplina: Estrutura de Dados I - Ano 2018                                        |");
+    printf("\n| >>> Professor: Allan Contessoto                                                        |");
+    printf("\n| >>> Compilador utilizado: gcc (Ubuntu 7.4.0-1ubuntu1~18.04.1) 7.4.0  (terminal)        |\n");
+    printf("|----------------------------------------------------------------------------------------|");
+    printf("\n\nDigite algo para continuar...");
+    getchar();
+
     // variáveis de controle
     int opc, id_livro;
 
@@ -325,8 +380,8 @@ int main () {
 
     do {
         system("clear");
-        printf ("\n\n\n-------------------------------------------------------------");
-        printf ("\n--> Bem vindo, digite uma opção:\n 1. Para cadastrar um novo livro\n 2. Para exibir os livros em ordem\n 3. Para exibir os livros em pré-ordem\n 4. Para exibir os livros em pós-ordem\n 5. Para buscar livro pelo ID\n 6. Remover livro\n 7. Derrubar árvore (esvaziar árvore)\n 8. Reservar livro\n 9. Exibir todos os livros reservados\n 0. Para sair\n");
+        printf ("-------------------------------------------------------------");
+        printf ("\n--> Bem vindo, digite uma opção:\n  1. Para cadastrar um novo livro\n  2. Para exibir os livros em ordem\n  3. Para exibir os livros em pré-ordem\n  4. Para exibir os livros em pós-ordem\n  5. Para buscar livro pelo ID\n  6. Remover livro\n  7. Derrubar árvore (esvaziar árvore)\n  8. Reservar livro\n  9. Exibir todos os livros reservados\n 10. Cancelar a reserva de um livro\n  0. Para sair\n");
         printf (" > Opção: ");
         scanf ("%d", &opc);
 
@@ -458,7 +513,6 @@ int main () {
                                 printf("\n >>> Livro não encontrado!");
                         }                        
                     } while (id_livro <= 0);
-                    
                 }
                 esperar();
             } break;
@@ -466,7 +520,7 @@ int main () {
             case 9: {
                 usuario * aux = lista_reservas;
                 if (aux == NULL)
-                    printf("\n\n >>> Não há livros reservados!!");
+                    printf("\n\n >>> Não há livros reservados!!! Não foi possível consultar!");
                 else {
                     while (aux != NULL) {
                         printf("\n\n >>> Usuário: %s", aux->nome);
@@ -476,8 +530,31 @@ int main () {
                 }
                 esperar();
             } break;
+            // cancelar reserva de livro
+            case 10: {
+                // verificando se eu tenho livros reservados
+                if (lista_reservas == NULL) // lista de livros reservados vazia
+                    printf("\n\n >>> Não há livros reservados!!! Não foi possível cancelar uma reserva.");
+                if (raiz == NULL) // não há livros cadastrados
+                    printf("\n >>> Não há livros cadastrados!! Não foi possível cancelar uma reserva.");
+                if (lista_reservas != NULL && raiz != NULL) {
+                    do {
+                        printf("\n >>> Qual o ID do livro que deseja cancelar a reserva: ");
+                        scanf("%d", &id_livro);
+                        
+                        if (id_livro <= 0)
+                            printf("\n>>> Digite um valor maior que 0");
+                        else {
+                            // verificando se o livro está cadastrado com o algoritmo de busca e remoção em uma lista
+                            lista_reservas = BuscaRemocaoP (lista_reservas, id_livro, raiz); // removendo o nó da lista
+                        }
+                    } while (id_livro <= 0);
+                }
+                esperar();
+            } break;
             default:
                 printf("\n > Digite uma opção válida!");
+                esperar();
         }
     } while (opc != 0);
 
