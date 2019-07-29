@@ -361,8 +361,9 @@ int main () {
     printf("\n| >>> Exercício: Biblioteca EDI versão AVL                                               |");
     printf("\n| >>> Disciplina: Estrutura de Dados I - Ano 2018                                        |");
     printf("\n| >>> Professor: Allan Contessoto                                                        |");
-    printf("\n| >>> Compilador utilizado: gcc (Ubuntu 7.4.0-1ubuntu1~18.04.1) 7.4.0  (terminal)        |\n");
-    printf("|----------------------------------------------------------------------------------------|");
+    printf("\n| >>> Compilador utilizado: gcc (Ubuntu 7.4.0-1ubuntu1~18.04.1) 7.4.0  (terminal)        |");
+    printf("\n| >>> Disponível no Github, url: <https://github.com/victorgardini/Lab_EDI-POO>          |");
+    printf("\n|----------------------------------------------------------------------------------------|");
     printf("\n\nDigite algo para continuar...");
     getchar();
 
