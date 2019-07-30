@@ -1,26 +1,17 @@
-public class Player {
-    private String name;
-    private String nickname;
-    private int age;
+import java.text.NumberFormat;
+
+public class Player extends Employee {
+    private String nickname; // nickname do jogador
     private int kills; // número de eliminações
     private int deaths; // número de mortes
     private int assistances; // número de assistências
     private double kd_rating; // este valor é calculado
     private String position; // options: Entry Fragger, Suporte, Lurker, Game Leader, AWPer
 
-    public Player(String name, String nickname, int age, int kills, int deaths, int assistances, String position){
-        this.name = name;
+    public Player(String name, String nickname, int age, String position, double salary){
+        super(name, age, salary); // chamando a construtora da superclasse Employee
         this.nickname = nickname;
-        this.age = age;
-        this.kills = kills;
-        this.deaths = deaths;
-        this.assistances = assistances;
-        this.kd_rating = (double) kills / deaths;
         this.position = position;
-    }
-
-    public String getName(){
-        return name;
     }
 
     public String getNickname(){
@@ -28,27 +19,57 @@ public class Player {
     }
 
     public String getFullInformation() {
-        return "Nome: " + name + "\nNickname: " + nickname + "\nIdade: " + age + "\nPosição: " + position;
-    }
-
-    public int getAge(){
-        return age;
+        return "Nome: " + name + "\nNickname: " + nickname + "\nIdade: " + age + "\nPosição: " + position + "\nKills: " + kills + "\nMortes: " + deaths + "\nAssistências: " + assistances + "K/D: " + kd_rating;
     }
 
     public double getKd_rating(){
         return kd_rating;
     }
 
+    // taxa de kill/mortes sendo atualizadas
+    public void setKd_rating(){
+        if (deaths != 0) {
+            // https://www.devmedia.com.br/arredondando-numeros-em-java/28248
+            double kd = (double) kills / deaths; // salvando o valor em uma variável aux
+            DecimalFormat df = new DecimalFormat("#.00"); // para utilizar apenas duas casas decimais
+            // df.format(kd); // df.format(var); retorna uma string formatada
+            kd_rating = Double.parseDouble(df.format(kd));
+        }
+        else
+            kd_rating = kills; // posso ter um jogador com 0 mortes, ex: 17/0
+    }
+
     public int getKills(){
         return kills;
+    }
+
+    public int setKills(int kills){
+        if (kills >= 0)
+            this.kills = kills;
+        else
+            this.kills = 0;
     }
 
     public int getDeaths(){
         return deaths;
     }
 
+    public int setDeaths(int deaths){
+        if (deaths >= 0)
+            this.deaths = deaths;
+        else
+            this.deaths = 0;
+    }
+
     public int getAssistances(){
         return assistances;
+    }
+
+    public int setAssistances(int assistances){
+        if (assistances >= 0)
+            this.assistances = assistances;
+        else
+            this.assistances = 0;
     }
 
     public String getPosition(){
