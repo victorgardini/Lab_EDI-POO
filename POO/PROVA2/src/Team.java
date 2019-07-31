@@ -3,12 +3,12 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 public class Team {
-    private String name;
-    private String short_name;
-    private int founded;
-    private Employee manager; // funcionário Coach
-    private List<Player> formplayers;
-    private int team_victorys;
+    private String name; // nome do time
+    private String short_name; // sigla do time
+    private int founded; // ano de fundação
+    private Employee manager; // obj funcionário (Coach)
+    private List<Player> formplayers; // lista de jogadores
+    private int team_victorys; // quantidade de vitórias
 
     public Team(String name, String short_name, int founded, Employee manager, List<Player> formplayers){
         this.name = name;
@@ -47,13 +47,6 @@ public class Team {
         team_victorys += 1; // somar mais uma vitória no time
     }
 
-    public void getTeamPlayersInfo() {
-        // Foreach
-        for (Player formplayer: formplayers) {
-            JOptionPane.showMessageDialog(null, "Informação jogador:\n" + formplayer.getFullInformation(), "Obtendo dados do jogador:" + formplayer.getName() , JOptionPane.INFORMATION_MESSAGE);
-        }
-    }
-
     // exibe na tela uma caixa contendo o nome, idade e nickname de cada jogador do time
     public void getTeamPlayersListInfo() {
         for (Player formplayer: formplayers) { // procurando na lista de jogadores cada obj jogador
@@ -64,11 +57,13 @@ public class Team {
         }
     }
 
-    // retorna um por um de cada jogador do time
+    // retorna o respedtivo obj jogador do time (quando utilizado em um for)
     public Player getPlayers(int i){
         return formplayers.get(i);
     }
 
+
+    // Retorna uma String concatenada com os principais dados de cada Player (relatório geral)
     public String getPlayersInfo(){
         String aux = "";
         for (Player player: formplayers) {
@@ -77,6 +72,7 @@ public class Team {
         return aux;
     }
 
+    // Retorna uma String concatenada com os salários de cada Player (relatório salário)
     public String getTeamPlayersSalary(){
         String aux = "";
         for (Player player: formplayers)
@@ -85,6 +81,8 @@ public class Team {
     }
 
     // Funções abaixo retornam uma String contendo os melhores jogadores em 3 critérios (k/d, kills e assistências)
+
+    // Retorna um obj jogador com maior kd
     public Player getTeamBestKDPlayer() {
         double maior = -1000000;
         Player aux = null;
@@ -98,6 +96,7 @@ public class Team {
         return aux;
     }
 
+    // Retorna um obj jogador com maior quantidade de kills
     public Player getTeamBestKillsPlayer() {
         double maior = -1000000;
         Player aux = null;
@@ -112,6 +111,7 @@ public class Team {
         return aux;
     }
 
+    // Retorna um obj jogador com maior quantidade de assistencias
     public Player getTeamBestAssistancePlayer() {
         double maior = -1000000;
         Player aux = null;
@@ -124,5 +124,9 @@ public class Team {
 
         // tenho o obj melhor jogador, retornando
         return aux;
+    }
+
+    public Employee getManager() {
+        return manager;
     }
 }

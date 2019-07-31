@@ -1,5 +1,3 @@
-import java.text.DecimalFormat;
-
 public class Player extends Employee {
     private String nickname; // nickname do jogador
     private int kills; // número de eliminações
@@ -29,11 +27,7 @@ public class Player extends Employee {
     // taxa de kill/mortes sendo atualizadas
     public void setKd_rating(){
         if (deaths != 0) {
-            // https://www.devmedia.com.br/arredondando-numeros-em-java/28248
             double kd = (double) kills / deaths; // salvando o valor em uma variável aux
-//            DecimalFormat df = new DecimalFormat("#.00"); // para utilizar apenas duas casas decimais
-            // df.format(kd); // df.format(var); retorna uma string formatada
-//            kd_rating = Double.parseDouble(df.format(kd));
             this.kd_rating = kd;
         }
         else

@@ -16,7 +16,7 @@ public class Main {
         int opc;
 
         // apresentação (primeiro menu)
-        JOptionPane.showMessageDialog(null, "Bem vindo ao campeonato das lendas do CS!!!\nAqui você irá encontrar alguns dos melhores times de todos os tempos mas não fique desesperado,\nbasta cadastrar o seu time (o último a ser classificado) e lutar pela premiação de U$$ 10.000 dólares!!!!\nDeseja-mos boa sorte pra você!", "Apresentação do campeonado", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Bem vindo ao campeonato das lendas do CS!!!\nAqui você irá encontrar alguns dos melhores times de todos os tempos mas não fique desesperado,\nbasta cadastrar o seu time (o último time a ser classificado para este campeonato) e ganhar o seu espaço do cenário competitivo!\nBoa sorte!", "Apresentação do campeonado", JOptionPane.INFORMATION_MESSAGE);
 
         // primeiramente, o usuário irá cadastrar o seu time
         try {
@@ -153,13 +153,15 @@ public class Main {
 
             // Melhores jogadores
             JOptionPane.showMessageDialog(null, "Jogador com mais eliminações:\n" + time_usuario.getTeamBestKillsPlayer().getFullInformation(), "Jogador que mais eliminou", JOptionPane.INFORMATION_MESSAGE);
-            JOptionPane.showMessageDialog(null, "Jogador com mais assistências:\n" + time_usuario.getTeamBestAssistancePlayer().getFullInformation(), "Jogador que mais eliminou", JOptionPane.INFORMATION_MESSAGE);
-            JOptionPane.showMessageDialog(null, "Jogador com maior k/d:\n" + time_usuario.getTeamBestKDPlayer().getFullInformation(), "Jogador que mais eliminou", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Jogador com mais assistências:\n" + time_usuario.getTeamBestAssistancePlayer().getFullInformation(), "Jogador com maior assistência", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Jogador com maior k/d:\n" + time_usuario.getTeamBestKDPlayer().getFullInformation(), "Jogador com maior K/D", JOptionPane.INFORMATION_MESSAGE);
 
             // Salários
-            JOptionPane.showMessageDialog(null, "Salário dos jogadores:" + time_usuario.getTeamPlayersSalary(), "Salário dos jogadores dos jogadores", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Coach:\nNome:" + time_usuario.getManager().getName() + "\nIdade:" + time_usuario.getManager().getAge() + "\nSalário:" + time_usuario.getManager().getSalary(), "Salários dos integrantes", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Salário dos jogadores:" + time_usuario.getTeamPlayersSalary(), "Salários dos integrantes", JOptionPane.INFORMATION_MESSAGE);
 
-
+            // Despedida
+            JOptionPane.showMessageDialog(null, "Isso é tudo! Até a próxima!", "Tchau!", JOptionPane.INFORMATION_MESSAGE);
 
         } catch (Exception e) {
 //            JOptionPane.showMessageDialog(null, "Erro! Erro ao cadastrar o seu time, tente novamente", "ERRO!", JOptionPane.WARNING_MESSAGE);
