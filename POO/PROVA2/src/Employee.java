@@ -8,7 +8,7 @@ public class Employee{ // superclasse funcionário
     public Employee(String name, int age, double salary){
         this.name = name;
         this.age = age;
-        this.salary = salary;
+        setSalary(salary);
     }
 
     public String getName() {
@@ -23,4 +23,15 @@ public class Employee{ // superclasse funcionário
         return salary;
     }
 
+    public void setSalary(double novo_salario) { // quando o funcionário ganha o campeonato, ele ganha também um aumento
+        salary = novo_salario;
+    }
+
+    public void setSalary(double novo_salario, double bonus) { // quando o funcionário ganha o campeonato, ele ganha também um aumento
+        salary += novo_salario * bonus;
+    }
+
+    public String getFullInformation() {
+        return "Nome: " + getName() + "\nIdade: " + getAge() + "\nSalário: " + getSalary();
+    }
 }

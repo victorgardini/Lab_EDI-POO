@@ -28,7 +28,7 @@ public class Team {
     }
 
     public String getTeamFullName() {
-        return "Nome: " + name + " [" + short_name + "]\nCoach: " + manager.getName();
+        return "Nome: " + name + " [" + short_name + "]\nCoach:\n" + manager.getFullInformation();
     }
 
     public int getTeamFounded() {
@@ -128,5 +128,13 @@ public class Team {
 
     public Employee getManager() {
         return manager;
+    }
+
+    public void bonus(){
+        // aplicando bonus no treinador
+        manager.setSalary(manager.getSalary(), 0.2);
+        for (Player player: formplayers){
+            player.setSalary(player.getSalary(), 0.4);
+        }
     }
 }

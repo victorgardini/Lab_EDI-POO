@@ -76,7 +76,6 @@ public class Main {
             aux_team = new Team("Ninjas in Pyjamas", "NIP", 2007, null, null);
             opponents_teams.add(aux_team);
 
-
             // executando os jogos
             int i = 0;
             while (i < 5) { // jogando contra os times da pos 0 até a pos 4 da lista
@@ -156,7 +155,8 @@ public class Main {
             JOptionPane.showMessageDialog(null, "Jogador com mais assistências:\n" + time_usuario.getTeamBestAssistancePlayer().getFullInformation(), "Jogador com maior assistência", JOptionPane.INFORMATION_MESSAGE);
             JOptionPane.showMessageDialog(null, "Jogador com maior k/d:\n" + time_usuario.getTeamBestKDPlayer().getFullInformation(), "Jogador com maior K/D", JOptionPane.INFORMATION_MESSAGE);
 
-            // Salários
+            // Salários (aplicando bônus salários)
+            time_usuario.bonus();
             JOptionPane.showMessageDialog(null, "Coach:\nNome:" + time_usuario.getManager().getName() + "\nIdade:" + time_usuario.getManager().getAge() + "\nSalário:" + time_usuario.getManager().getSalary(), "Salários dos integrantes", JOptionPane.INFORMATION_MESSAGE);
             JOptionPane.showMessageDialog(null, "Salário dos jogadores:" + time_usuario.getTeamPlayersSalary(), "Salários dos integrantes", JOptionPane.INFORMATION_MESSAGE);
 
