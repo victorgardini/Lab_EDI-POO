@@ -1,4 +1,4 @@
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 
 public class Player extends Employee {
     private String nickname; // nickname do jogador
@@ -19,10 +19,10 @@ public class Player extends Employee {
     }
 
     public String getFullInformation() {
-        return "Nome: " + name + "\nNickname: " + nickname + "\nIdade: " + age + "\nPosição: " + position + "\nKills: " + kills + "\nMortes: " + deaths + "\nAssistências: " + assistances + "K/D: " + kd_rating;
+        return "Nome: " + getName() + "\nNickname: " + nickname + "\nIdade: " + getAge() + "\nPosição: " + position + "\nKills: " + kills + "\nMortes: " + deaths + "\nAssistências: " + assistances + "K/D: " + kd_rating;
     }
 
-    public double getKd_rating(){
+    public double getKd_rating() {
         return kd_rating;
     }
 
@@ -31,9 +31,10 @@ public class Player extends Employee {
         if (deaths != 0) {
             // https://www.devmedia.com.br/arredondando-numeros-em-java/28248
             double kd = (double) kills / deaths; // salvando o valor em uma variável aux
-            DecimalFormat df = new DecimalFormat("#.00"); // para utilizar apenas duas casas decimais
+//            DecimalFormat df = new DecimalFormat("#.00"); // para utilizar apenas duas casas decimais
             // df.format(kd); // df.format(var); retorna uma string formatada
-            kd_rating = Double.parseDouble(df.format(kd));
+//            kd_rating = Double.parseDouble(df.format(kd));
+            this.kd_rating = kd;
         }
         else
             kd_rating = kills; // posso ter um jogador com 0 mortes, ex: 17/0
@@ -43,7 +44,7 @@ public class Player extends Employee {
         return kills;
     }
 
-    public int setKills(int kills){
+    public void setKills(int kills){
         if (kills >= 0)
             this.kills = kills;
         else
@@ -54,7 +55,7 @@ public class Player extends Employee {
         return deaths;
     }
 
-    public int setDeaths(int deaths){
+    public void setDeaths(int deaths){
         if (deaths >= 0)
             this.deaths = deaths;
         else
@@ -65,7 +66,7 @@ public class Player extends Employee {
         return assistances;
     }
 
-    public int setAssistances(int assistances){
+    public void setAssistances(int assistances){
         if (assistances >= 0)
             this.assistances = assistances;
         else

@@ -6,11 +6,11 @@ public class Team {
     private String name;
     private String short_name;
     private int founded;
-    private Manager manager;
+    private Employee manager; // funcionário Coach
     private List<Player> formplayers;
     private int team_victorys;
 
-    public Team(String name, String short_name, int founded, Manager manager, List<Player> formplayers){
+    public Team(String name, String short_name, int founded, Employee manager, List<Player> formplayers){
         this.name = name;
         this.short_name = short_name; // sigla
         this.founded = founded;
@@ -28,7 +28,7 @@ public class Team {
     }
 
     public String getTeamFullName() {
-        return "Nome: " + name + " [" + short_name + "]\nCoach: " + manager.getManagerName();
+        return "Nome: " + name + " [" + short_name + "]\nCoach: " + manager.getName();
     }
 
     public int getTeamFounded() {
@@ -36,17 +36,21 @@ public class Team {
     }
 
     public String getManagerName() {
-        return manager.getManagerName();
+        return manager.getName();
     }
 
     public int getTeam_victorys() {
         return team_victorys;
     }
 
+    public void addVitory(){
+        team_victorys += 1; // somar mais uma vitória no time
+    }
+
     public void getTeamPlayersInfo() {
         // Foreach
         for (Player formplayer: formplayers) {
-            JOptionPane.showMessageDialog(null, formplayer.getFullInformation, JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Informação jogador:\n" + formplayer.getFullInformation(), "Obtendo dados do jogador:" + formplayer.getName() , JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -56,8 +60,21 @@ public class Team {
             JOptionPane.showMessageDialog(null, "Nome: " + formplayer.getName() +
                     "\nNickname: " + formplayer.getNickname() +
                     "\nIdade: " + formplayer.getAge() +
-                    "\nPosição: " + aux.getPosition(), "Exibindo integrantes do time", JOptionPane.INFORMATION_MESSAGE);
+                    "\nPosição: " + formplayer.getPosition(), "Exibindo integrantes do time", JOptionPane.INFORMATION_MESSAGE);
         }
+    }
+
+    // retorna um por um de cada jogador do time
+    public Player getPlayers(int i){
+        return formplayers.get(i);
+    }
+
+    public String getPlayersInfo(){
+        String aux = "";
+        for (Player player: formplayers) {
+            aux += "\nNome: " + player.getName() + "\nApelido: " + player.getNickname() + "\nPosição: " + player.getPosition() + "\nEliminações: " + player.getKills() + "\nMortes: " + player.getDeaths() + "\nAssistências: " + player.getAssistances() + "\nK/D: " + player.getKd_rating();
+        }
+        return aux;
     }
 
     // Funções abaixo retornam uma String contendo os melhores jogadores em 3 critérios (k/d, kills e assistências)
