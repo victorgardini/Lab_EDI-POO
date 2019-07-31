@@ -78,10 +78,11 @@ public class Main {
 
 
             // executando os jogos
-            for (int i = 0; i < 5; i++) { // jogando contra os times da pos 0 até a pos 4 da lista
+            int i = 0;
+            while (i < 5) { // jogando contra os times da pos 0 até a pos 4 da lista
                 String options1[] = {"Próxima partida", "Dados dos jogadores", "Dados do meu time"};
                 String options2[] = {"Sim", "Não"};
-                opc = JOptionPane.showOptionDialog(null, "Escolha uma opção", "Selecione uma das opções abaixo", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options1, options1[0]);
+                opc = JOptionPane.showOptionDialog(null, "Restam "+ (5 - i) +" partidas\nEscolha uma opção", "Selecione uma das opções abaixo", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options1, options1[0]);
 
                 switch (opc) {
                     case 0: // Jogar partida
@@ -91,23 +92,23 @@ public class Main {
                         int rounds = 16 + rand.nextInt(20); // 16 é a quantidade mínima de rounds para uma vitória
 
                         // de 0->5 o meu time ganhou
-                        if (resultado <= 5) { // meu time ganhou
+                        if (resultado <= 5) { // GANHAMOS
                             time_usuario.addVitory();
                             if (rounds == 16)
                                 JOptionPane.showMessageDialog(null, "Que jogo meu amigo! Garantimos a vitória com esse lindo (16x0)!", "Resultado", JOptionPane.INFORMATION_MESSAGE);
                             else if (rounds >= 32) // overtime
                                 JOptionPane.showMessageDialog(null, "No overtime! Garantimos a vitória!", "Resultado", JOptionPane.INFORMATION_MESSAGE);
                             else
-                                JOptionPane.showMessageDialog(null, time_usuario.getTeamName() + "Garantimos a vitória!! Placar (16x" + (rounds - 16) + ")", "Resultado", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Garantimos a vitória!! Placar (16x" + (rounds - 16) + ")", "Resultado", JOptionPane.INFORMATION_MESSAGE);
                         }
-                        else {
-                            opponents_teams.get(i).addVitory(); // time oponente venceu
+                        else { // PERDEMOS
+                            opponents_teams.get(i).addVitory();
                             if (rounds == 16)
                                 JOptionPane.showMessageDialog(null, "Nem tudo na vida são flores!\n Ainda mais com essa derrota para a " + opponents_teams.get(i).getTeamName() + " por incríveis (16x0)!", "Resultado", JOptionPane.INFORMATION_MESSAGE);
                             else if (rounds >= 32) // overtime
                                 JOptionPane.showMessageDialog(null, "Essa foi por pouco, no overtime! Mas não garantimos a vitória em cima da " + opponents_teams.get(i).getTeamName(), "Resultado", JOptionPane.INFORMATION_MESSAGE);
                             else
-                                JOptionPane.showMessageDialog(null, time_usuario.getTeamName() + "Infelizmente perdemos por (16x" + (rounds - 16) + ")", "Resultado", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Infelizmente perdemos para o time: " + opponents_teams.get(i).getTeamName() + " com o placar de (16x" + (rounds - 16) + ")", "Resultado", JOptionPane.INFORMATION_MESSAGE);
                         }
 
                         // calculando dados dos jogadores
@@ -128,7 +129,8 @@ public class Main {
 
                         // pra verificar se o usuário deseja saber os detalhes dos jogadores do seu time na última partida
                         int aux1 = JOptionPane.showOptionDialog(null, "Deseja ver os detalhes dos jogadores desta partida:", "Selecione uma das opções abaixo", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options2, options2[1]);
-                        if (aux1 == 1) // quer ver!
+                        i++; // realizei um jogo, somar na contadora
+                        if (aux1 == 0) // quer ver!
                             JOptionPane.showMessageDialog(null, "Relatório dos jogadores:" + time_usuario.getPlayersInfo(), "Exibindo relatório dos jogadores", JOptionPane.INFORMATION_MESSAGE);
                         break;
                     case 1: // exibindo dados dos jogadores (mini relatório)
@@ -136,24 +138,28 @@ public class Main {
                         break;
                     case 2: // exibindo status do time do usuário
                         JOptionPane.showMessageDialog(null, "Meu time: " + time_usuario.getTeamFullName() + "\nVitórias: " + time_usuario.getTeam_victorys(), "Exibindo relatório do meu time", JOptionPane.INFORMATION_MESSAGE);
-                        break;
                 }
-            }
+            } // fim jogos
 
-            // fim dos jogos, exibindo relatório do time
+            // exibindo relatório do time
+            JOptionPane.showMessageDialog(null, "O campeonato acabou, está na hora de saber como o nosso time se saui!\nConfira a seguir, os relatórios.", "O campeonato acabou!", JOptionPane.INFORMATION_MESSAGE);
 
-            /*  Você deve permitir a geração dos seguintes relatórios:
-                    a) Funcionários (dividido pelo tipo).
-                    b) Salários (dividido pelo tipo).
-                    c) Score de gols por jogador.
 
-                -Relatório (PDF):
-                    --> O que fizemos (qual foi a ideia)
-                    --> Como fizemos
-                    --> Como pensamos
-                    --> Justificar as escolhas
-                    --> Quais conceitos de POO utilizamos (ex, onde eu usei o polimorfismo),
-             */
+            // Exibindo informações gerais do meu time
+            // Time + coach
+            JOptionPane.showMessageDialog(null, "Meu time:\n" + time_usuario.getTeamFullName() + "\nVitórias: " + time_usuario.getTeam_victorys(), "Desempenho do time", JOptionPane.INFORMATION_MESSAGE);
+            // Funcionários (jogadores) + score dos jogadores
+            JOptionPane.showMessageDialog(null, "Relatório dos jogadores:" + time_usuario.getPlayersInfo(), "Desempenho dos jogadores dos jogadores", JOptionPane.INFORMATION_MESSAGE);
+
+            // Melhores jogadores
+            JOptionPane.showMessageDialog(null, "Jogador com mais eliminações:\n" + time_usuario.getTeamBestKillsPlayer().getFullInformation(), "Jogador que mais eliminou", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Jogador com mais assistências:\n" + time_usuario.getTeamBestAssistancePlayer().getFullInformation(), "Jogador que mais eliminou", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Jogador com maior k/d:\n" + time_usuario.getTeamBestKDPlayer().getFullInformation(), "Jogador que mais eliminou", JOptionPane.INFORMATION_MESSAGE);
+
+            // Salários
+            JOptionPane.showMessageDialog(null, "Salário dos jogadores:" + time_usuario.getTeamPlayersSalary(), "Salário dos jogadores dos jogadores", JOptionPane.INFORMATION_MESSAGE);
+
+
 
         } catch (Exception e) {
 //            JOptionPane.showMessageDialog(null, "Erro! Erro ao cadastrar o seu time, tente novamente", "ERRO!", JOptionPane.WARNING_MESSAGE);

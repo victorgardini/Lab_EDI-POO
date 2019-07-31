@@ -19,7 +19,7 @@ public class Player extends Employee {
     }
 
     public String getFullInformation() {
-        return "Nome: " + getName() + "\nNickname: " + nickname + "\nIdade: " + getAge() + "\nPosição: " + position + "\nKills: " + kills + "\nMortes: " + deaths + "\nAssistências: " + assistances + "K/D: " + kd_rating;
+        return "Nome: " + getName() + "\nNickname: " + nickname + "\nIdade: " + getAge() + "\nPosição: " + position + "\nKills: " + kills + "\nMortes: " + deaths + "\nAssistências: " + assistances + "\nK/D: " + kd_rating;
     }
 
     public double getKd_rating() {

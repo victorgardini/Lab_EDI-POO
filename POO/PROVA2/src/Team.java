@@ -72,8 +72,15 @@ public class Team {
     public String getPlayersInfo(){
         String aux = "";
         for (Player player: formplayers) {
-            aux += "\nNome: " + player.getName() + "\nApelido: " + player.getNickname() + "\nPosição: " + player.getPosition() + "\nEliminações: " + player.getKills() + "\nMortes: " + player.getDeaths() + "\nAssistências: " + player.getAssistances() + "\nK/D: " + player.getKd_rating();
+            aux += "\n------------------------------------\nNome: " + player.getName() + "\nApelido: " + player.getNickname() + "\nPosição: " + player.getPosition() + "\nEliminações: " + player.getKills() + "\nMortes: " + player.getDeaths() + "\nAssistências: " + player.getAssistances() + "\nK/D: " + player.getKd_rating();
         }
+        return aux;
+    }
+
+    public String getTeamPlayersSalary(){
+        String aux = "";
+        for (Player player: formplayers)
+            aux += "\n------------------------------------\nNome: " + player.getName() + "\nApelido: " + player.getNickname() + "\nPosição: " + player.getPosition() + "\nSalário: R$ " + player.getSalary();
         return aux;
     }
 
@@ -87,14 +94,8 @@ public class Team {
                 aux = bestplayer;
             }
         }
-
-        // Já tenho o obj melhor jogador
+        // tenho o obj melhor jogador, retornando
         return aux;
-//        return ("Melhor jogador:" +
-//                "\nNome: " + aux.getName() +
-//                "\nNickname: " + aux.getNickname() +
-//                "\nPosição: " + aux.getNickname() +
-//                "\nK/D: " + aux.getKd_rating());
     }
 
     public Player getTeamBestKillsPlayer() {
@@ -107,7 +108,7 @@ public class Team {
             }
         }
 
-        // Já tenho o obj melhor jogador
+        // tenho o obj melhor jogador, retornando
         return aux;
     }
 
@@ -121,7 +122,7 @@ public class Team {
             }
         }
 
-        // Já tenho o obj melhor jogador
+        // tenho o obj melhor jogador, retornando
         return aux;
     }
 }
